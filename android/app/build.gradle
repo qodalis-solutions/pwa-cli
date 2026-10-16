@@ -1,25 +1,58 @@
 apply plugin: 'com.android.application'
 
+import groovy.json.JsonSlurper
+
+// versionName comes from package.json; versionCode is derived from it
+// (1.2.3 -> 10203) unless CI passes -PversionCode=<n>. Play requires every
+// upload to have a higher versionCode, so bump package.json before releasing.
+def packageVersion = new JsonSlurper().parse(file('../../package.json')).version
+def derivedVersionCode = packageVersion.tokenize('.-')[0..2].collect { it as int }.with { it[0] * 10000 + it[1] * 100 + it[2] }
+def appVersionCode = (project.findProperty('versionCode') ?: derivedVersionCode) as int
+
+// Upload-key signing for release builds, read from android/keystore.properties
+// (git-ignored) or from ANDROID_KEYSTORE_* environment variables in CI.
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def signingValue = { String prop, String env -> keystoreProps.getProperty(prop) ?: System.getenv(env) }
+def releaseStoreFile = signingValue('storeFile', 'ANDROID_KEYSTORE_FILE')
+
 android {
-    namespace "com.qodalis.cli"
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace = "com.qodalis.cli"
+    compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.qodalis.cli"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersionCode
+        versionName packageVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
-            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            if (releaseStoreFile) {
+                storeFile rootProject.file(releaseStoreFile)
+                storePassword signingValue('storePassword', 'ANDROID_KEYSTORE_PASSWORD')
+                keyAlias signingValue('keyAlias', 'ANDROID_KEY_ALIAS')
+                keyPassword signingValue('keyPassword', 'ANDROID_KEY_PASSWORD')
+            }
         }
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (releaseStoreFile) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }

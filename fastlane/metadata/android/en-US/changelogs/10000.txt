@@ -1,0 +1,4 @@
+First release of Qodalis CLI for Android:
+• 100+ offline commands, a file system, editor and six terminal games
+• Extra key row with Esc, Tab, Ctrl+C, Ctrl+L, arrows and symbols
+• Keyboard mode without autocorrect for exact command input
