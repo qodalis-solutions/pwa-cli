@@ -1,0 +1,9 @@
+<main class="shell">
+  <cli class="terminal" [options]="options" [modules]="modules" (engineReady)="onEngineReady($event)" />
+  @if (showKeys()) {
+    <app-extra-keys (key)="onExtraKey($event)" />
+  }
+</main>
+@if (updateReady()) {
+  <button type="button" class="update" (click)="reload()">A new version is ready. Tap to reload.</button>
+}

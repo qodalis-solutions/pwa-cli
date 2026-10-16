@@ -1,0 +1,31 @@
+// The shell follows the visible viewport (see viewport.ts) and keeps clear of
+// notches, rounded corners and the Android navigation bar.
+.shell
+  position: fixed
+  top: var(--app-top, 0px)
+  left: 0
+  right: 0
+  height: var(--app-height, 100dvh)
+  display: flex
+  flex-direction: column
+  box-sizing: border-box
+  padding: var(--inset-top) var(--inset-right) var(--inset-bottom) var(--inset-left)
+  background: var(--app-bg)
+
+.terminal
+  display: block
+  flex: 1 1 auto
+  min-height: 0
+  padding: 4px 0 0 4px
+
+.update
+  position: fixed
+  left: 50%
+  bottom: calc(var(--inset-bottom) + 64px)
+  transform: translateX(-50%)
+  padding: 10px 16px
+  border: 1px solid #2f6fb5
+  border-radius: 8px
+  background: #0d2236
+  color: #d7e9fb
+  font: 500 14px/1.3 system-ui, sans-serif
