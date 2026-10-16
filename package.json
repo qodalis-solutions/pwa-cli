@@ -15,7 +15,11 @@
     "cap:sync": "npm run build && cap sync android",
     "android:open": "cap open android",
     "android:apk": "npm run cap:sync && scripts/gradlew.sh assembleDebug",
-    "android:bundle": "npm run cap:sync && scripts/gradlew.sh bundleRelease"
+    "android:bundle": "npm run cap:sync && scripts/gradlew.sh bundleRelease",
+    "play:status": "fastlane status",
+    "play:internal": "fastlane internal",
+    "play:promote": "fastlane promote",
+    "play:listing": "fastlane listing"
   },
   "dependencies": {
     "@angular/common": "^22.2.0",

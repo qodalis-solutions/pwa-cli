@@ -66,3 +66,11 @@ test.describe('terminal app', () => {
     expect(await currentLine(page)).toMatch(/\$\s*$/);
   });
 });
+
+test('privacy command links to the published policy', async ({ page }) => {
+  await openTerminal(page);
+  await run(page, 'privacy');
+  const text = await terminalText(page);
+  expect(text).toContain('The app collects no data');
+  expect(text).toContain('https://cli.qodalis.com/privacy/');
+});
