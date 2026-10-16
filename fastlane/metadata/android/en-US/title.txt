@@ -1,1 +1,1 @@
-Qodalis CLI: Pocket Terminal
+Qodalis CLI: Offline Terminal
