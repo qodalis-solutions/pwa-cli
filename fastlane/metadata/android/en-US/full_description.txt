@@ -1,0 +1,33 @@
+Qodalis CLI puts a real command line on your phone. It runs entirely on your device, works offline, needs no account and collects no data.
+
+DEVELOPER TOOLS
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary and morse
+• regex test, match, replace and extract
+• json format, minify and validate; csv parse, filter, sort and convert
+• string tools: upper, lower, camelCase, kebab-case, slug, trim, pad, replace and more
+• timestamps, calendar, cron schedules, lorem ipsum, random numbers and passwords
+• curl and wget for HTTP requests, plus an internet speed test
+
+A FILE SYSTEM IN YOUR POCKET
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, uniq, head, tail and wc
+• Pipes, aliases, environment variables, history search and tab completion
+• Edit files with the built-in nano editor
+• Files are kept on your device between sessions
+
+PRODUCTIVITY
+• To-do list, stopwatch and countdown timer
+• QR code generator, Markdown renderer and terminal charts
+• Snippets and scripts you can save and run again
+
+GAMES
+• 2048, Tetris, Snake, Minesweeper, Sudoku and Wordle, all playable in the terminal
+
+BUILT FOR TOUCH SCREENS
+• A key row with Esc, Tab, Ctrl+C, Ctrl+L, arrows and symbols that phone keyboards hide
+• A keyboard mode without autocorrect, so commands arrive exactly as typed
+• Themes, adjustable font size and 11 languages
+
+PRIVATE BY DESIGN
+No ads, no analytics, no sign-up. Everything you create stays on your device. The app only uses the network when you run a command that needs it, such as curl or speed-test.
+
+Qodalis CLI is open source and built on the Qodalis web terminal framework: https://cli.qodalis.com

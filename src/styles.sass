@@ -1,0 +1,23 @@
+// Safe-area insets: env() on browsers, plus the --safe-area-inset-* variables
+// Capacitor's SystemBars injects on Android WebViews that report env() as 0.
+\:root
+  --app-bg: #000
+  --keys-bg: #111418
+  --keys-fg: #d7dde5
+  --keys-border: #262b33
+  --inset-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))
+  --inset-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px))
+  --inset-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px))
+  --inset-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px))
+  color-scheme: dark
+
+html,
+body
+  margin: 0
+  padding: 0
+  height: 100%
+  overflow: hidden
+  background: var(--app-bg)
+  overscroll-behavior: none
+  -webkit-tap-highlight-color: transparent
+  -webkit-text-size-adjust: 100%
