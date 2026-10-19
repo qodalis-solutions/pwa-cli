@@ -69,7 +69,7 @@ The version shown in the store comes from `package.json`; `versionCode` is deriv
 ## Store assets
 
 ```bash
-npm run assets        # icons, adaptive icons and splash from resources/logo.png
+npm run assets        # icons, adaptive icons and splash from the SVGs in resources/
 npm run screenshots   # Play screenshots + feature graphic (needs a production build)
 ```
 

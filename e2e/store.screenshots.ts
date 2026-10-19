@@ -57,13 +57,13 @@ for (const shot of shots) {
 }
 
 test('feature-graphic', async ({ page }) => {
-  const logo = readFileSync('resources/logo.png').toString('base64');
+  const icon = readFileSync('resources/icon.svg').toString('base64');
   await page.setViewportSize({ width: 1024, height: 500 });
   await page.setContent(`
     <html><body style="margin:0;width:1024px;height:500px;display:flex;align-items:center;gap:56px;
       padding:0 72px;box-sizing:border-box;background:linear-gradient(120deg,#142231 0%,#0a0e17 70%);
       font-family:ui-monospace,Menlo,monospace;color:#e6edf5">
-      <img src="data:image/png;base64,${logo}" style="width:260px;height:260px;border-radius:48px">
+      <img src="data:image/svg+xml;base64,${icon}" style="width:260px;height:260px;border-radius:48px">
       <div>
         <div style="font:700 64px/1.1 system-ui,sans-serif">Qodalis CLI</div>
         <div style="margin-top:18px;font-size:26px;color:#9cc7ea">A terminal in your pocket</div>

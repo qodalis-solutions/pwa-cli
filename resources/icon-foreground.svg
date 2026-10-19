@@ -1,0 +1,6 @@
+<!-- Android adaptive icon foreground: the prompt from icon.svg on a 108dp canvas
+     (the 512-unit tile maps to the 72dp visible area, so the glyph keeps its size). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-128 -128 768 768">
+  <polyline points="140,166 240,256 140,346" fill="none" stroke="#142231" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="266" y="316" width="130" height="40" rx="20" fill="#142231"/>
+</svg>
