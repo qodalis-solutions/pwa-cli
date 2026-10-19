@@ -35,7 +35,7 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  android:
+  android-debug:
     name: Android debug build
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -58,7 +58,8 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
 
-  testers:
+  # Each native platform gets its own tester job (iOS: TestFlight, later).
+  android-testers:
     name: Upload to Play internal testing
     if: github.event_name == 'push'
     needs: web

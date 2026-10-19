@@ -24,6 +24,21 @@ Works offline, needs no account, collects no data.
 
 </div>
 
+## Platforms
+
+One Angular codebase, wrapped per platform with [Capacitor](https://capacitorjs.com).
+
+| Platform | Status | Ships through | Code |
+| --- | --- | --- | --- |
+| 🌐 Web (PWA) | ✅ Live | GitHub Pages, installable from the browser | `src/` |
+| 🤖 Android | ✅ Live | Google Play (`com.qodalis.cli`) | `android/` |
+| 🍎 iOS | 🗓 Planned | App Store / TestFlight | `ios/` (via `npx cap add ios`) |
+| 🖥 Desktop | 🗓 Planned | Electron | `electron/` |
+
+Platform code stays in its own folder, npm scripts are prefixed by platform (`android:*`, later
+`ios:*`, `electron:*`), and each platform gets its own tester and production jobs in CI. Per-platform
+behaviour in the app goes through [`src/app/native/native-shell.ts`](src/app/native/native-shell.ts).
+
 ## What's inside
 
 The [Qodalis CLI](https://cli.qodalis.com) engine with every plugin that runs on the device. None
@@ -100,6 +115,8 @@ flowchart LR
 - **Merge into `develop`**: CI tests, builds a signed bundle and rolls it out to internal testers.
 - **Merge into `main`**: CI publishes the PWA and promotes the exact build testers had to production.
   Nothing is rebuilt.
+- iOS and desktop will follow the same flow: `develop` to TestFlight or a beta channel, `main` to the
+  stores.
 
 To release, bump `version` in `package.json` and add release notes in
 `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (1.2.3 → `10203.txt`). The whole flow,

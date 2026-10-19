@@ -4,12 +4,15 @@ import { SplashScreen } from '@capacitor/splash-screen';
 
 export const isNative = Capacitor.isNativePlatform();
 
-/** Android integration: the back button sends the app to the background. */
+/** 'web', 'android', and later 'ios' or 'electron'. */
+export const platform = Capacitor.getPlatform();
+
+/** Per-platform integration for the native shells. */
 export function initNativeShell(): void {
-  if (!isNative) {
-    return;
+  if (platform === 'android') {
+    // The back button sends the app to the background, keeping the session.
+    App.addListener('backButton', () => App.minimizeApp());
   }
-  App.addListener('backButton', () => App.minimizeApp());
 }
 
 /** Hides the launch splash once the terminal has drawn its first prompt. */

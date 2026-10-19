@@ -11,6 +11,8 @@
 #   fastlane listing images_only:true                 push only the icon, feature graphic and screenshots
 #   fastlane pull_listing                             download the listing from Play into fastlane/metadata
 # Listing text, images and release notes live in fastlane/metadata/android.
+# iOS lanes (TestFlight, App Store) will go in a `platform :ios` block, with
+# their metadata in fastlane/metadata/ios.
 
 default_platform(:android)
 
