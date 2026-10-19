@@ -69,12 +69,14 @@ The version shown in the store comes from `package.json`; `versionCode` is deriv
 ## Store assets
 
 ```bash
-npm run assets        # icons, adaptive icons and splash from resources/logo.png
+npm run assets        # icons, adaptive icons and splash from the SVGs in resources/
 npm run screenshots   # Play screenshots + feature graphic (needs a production build)
 ```
 
 Listing text and images live in [`fastlane/metadata/android/en-US`](fastlane/metadata/android/en-US).
-The privacy policy is [`public/privacy.html`](public/privacy.html), published with the PWA.
+The privacy policy lives at https://cli.qodalis.com/privacy/ (source in web-cli,
+`apps/docs/src/static/privacy`); [`public/privacy.html`](public/privacy.html) is the copy shipped with
+the PWA, and the `privacy` command shows it in the app. Keep the two in sync.
 
 Publishing steps, Play Console answers and CI secrets: [PLAY_STORE.md](PLAY_STORE.md).
 

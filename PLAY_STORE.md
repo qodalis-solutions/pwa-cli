@@ -12,7 +12,7 @@ Play Console account owner can do.
 | Permissions | `INTERNET` (plus AndroidX's internal, signature-level receiver permission) |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
-| Privacy policy | `public/privacy.html`, published at `https://qodalis-solutions.github.io/pwa-cli/privacy.html` by the release workflow |
+| Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
 
 ## 1. Upload key
 
@@ -45,8 +45,8 @@ keyPassword=...
 
 1. **Create app**: name *Qodalis CLI*, default language English (US), type *App*, *Free*.
 2. **Dashboard → Set up your app**, answer as follows:
-   - **Privacy policy**: `https://qodalis-solutions.github.io/pwa-cli/privacy.html` (after the first
-     push to `main` publishes GitHub Pages, or host `public/privacy.html` anywhere public).
+   - **Privacy policy**: `https://cli.qodalis.com/privacy/`. The app links to it from the `privacy`
+     command, as Play requires.
    - **App access**: all functionality is available without special access.
    - **Ads**: the app does not contain ads.
    - **Content rating**: questionnaire category *Utility, Productivity, Communication, or Other*.

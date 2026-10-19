@@ -1,0 +1,79 @@
+# Google Play from the command line. Run from the repository root:
+#   fastlane status                                   versions on every track
+#   fastlane internal                                 build and upload to internal testing (draft)
+#   fastlane internal status:completed                ...and roll it out to testers
+#   fastlane promote to:production rollout:0.1        promote internal -> production at 10%
+#   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
+#   fastlane listing                                  push store text and images
+#   fastlane listing validate:true                    dry run: Google validates, nothing changes
+#   fastlane listing images_only:true                 push only the icon, feature graphic and screenshots
+#   fastlane pull_listing                             download the listing from Play into fastlane/metadata
+# Listing text, images and release notes live in fastlane/metadata/android.
+
+default_platform(:android)
+
+AAB = "android/app/build/outputs/bundle/release/app-release.aab"
+TRACKS = %w[internal alpha beta production].freeze
+
+platform :android do
+  desc "Version codes and release names on every track"
+  lane :status do
+    TRACKS.each do |track|
+      codes = google_play_track_version_codes(track: track)
+      names = google_play_track_release_names(track: track)
+      UI.message("#{track.ljust(10)} #{codes.empty? ? '-' : "#{names.join(', ')} (#{codes.join(', ')})"}")
+    end
+  end
+
+  desc "Build the signed bundle and upload it to internal testing"
+  lane :internal do |options|
+    sh("cd .. && npm run android:bundle")
+    upload_to_play_store(
+      track: "internal",
+      aab: AAB,
+      release_status: options.fetch(:status, "draft"),
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "Promote the latest release of one track to another"
+  lane :promote do |options|
+    from = options.fetch(:from, "internal")
+    to = options.fetch(:to) { UI.user_error!("Pass to:<track>, e.g. to:production") }
+    rollout = options[:rollout]&.to_s
+    version_code = google_play_track_version_codes(track: from).max
+    UI.user_error!("No release on #{from}") unless version_code
+    upload_to_play_store(
+      track: from,
+      track_promote_to: to,
+      version_code: version_code,
+      # A fraction below 1 is a staged rollout; otherwise everyone gets it.
+      rollout: rollout,
+      track_promote_release_status: rollout && rollout.to_f < 1 ? "inProgress" : "completed",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "Upload store listing text, icon, feature graphic and screenshots"
+  lane :listing do |options|
+    upload_to_play_store(
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_changelogs: true,
+      skip_upload_metadata: options.fetch(:images_only, false),
+      validate_only: options.fetch(:validate, false),
+    )
+  end
+
+  desc "Download the current store listing into fastlane/metadata"
+  lane :pull_listing do
+    download_from_play_store(metadata_path: "fastlane/metadata/android")
+  end
+end

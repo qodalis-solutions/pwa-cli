@@ -1,0 +1,10 @@
+<!-- Android adaptive icon background: the gradient from icon.svg on a 108dp canvas. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-128 -128 768 768">
+  <defs>
+    <linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0" stop-color="#A9E0F2"/>
+      <stop offset="1" stop-color="#2A6BBA"/>
+    </linearGradient>
+  </defs>
+  <rect x="-128" y="-128" width="768" height="768" fill="url(#bg)"/>
+</svg>

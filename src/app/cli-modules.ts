@@ -35,6 +35,8 @@ import { wgetModule } from '@qodalis/cli-wget';
 import { wordleModule } from '@qodalis/cli-wordle';
 import { yesnoModule } from '@qodalis/cli-yesno';
 
+import { appModule } from './privacy-command';
+
 /**
  * Plugins bundled with the app. All of them run on the device; none needs a
  * Qodalis CLI server (curl, wget and speed-test only reach the URLs the user
@@ -42,6 +44,8 @@ import { yesnoModule } from '@qodalis/cli-yesno';
  * email and password before the terminal can be used.
  */
 export const CLI_MODULES: ICliModule[] = [
+  // App commands (privacy policy)
+  appModule,
   // Tools
   guidModule,
   stringModule,
