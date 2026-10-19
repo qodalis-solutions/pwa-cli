@@ -1,45 +1,73 @@
+<div align="center">
+
+<img src="fastlane/metadata/android/en-US/images/icon.png" width="112" alt="Qodalis CLI icon">
+
 # Qodalis CLI for phones
 
-The [Qodalis CLI](https://cli.qodalis.com) as a mobile app: an offline terminal with 100+ commands,
-a file system, an editor and terminal games. It ships two ways from one codebase:
+**A real terminal in your pocket.** 100+ commands, a file system, an editor and terminal games.
+Works offline, needs no account, collects no data.
 
-- **PWA**: installable from the browser, works offline through a service worker.
-- **Android app**: the same build wrapped with [Capacitor](https://capacitorjs.com) and published to
-  Google Play as `com.qodalis.cli`.
+[![CI](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/ci.yml)
+[![Release](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/release.yml/badge.svg)](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/release.yml)
+![Version](https://img.shields.io/github/package-json/v/qodalis-solutions/pwa-cli/main?label=version)
+![Android](https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?logo=pwa&logoColor=white)
 
-Built with Angular 22, `@qodalis/angular-cli` 2.x and Capacitor 8 (Android target SDK 36).
+[**Google Play**](https://play.google.com/store/apps/details?id=com.qodalis.cli) ·
+[**Open in the browser**](https://qodalis-solutions.github.io/pwa-cli/) ·
+[Qodalis CLI docs](https://cli.qodalis.com) ·
+[Privacy](https://cli.qodalis.com/privacy/)
 
-## Mobile features
+<img src="public/screenshots/phone-1.png" width="240" alt="Plugin commands">&nbsp;
+<img src="public/screenshots/phone-2.png" width="240" alt="Files and editor">&nbsp;
+<img src="public/screenshots/phone-3.png" width="240" alt="Terminal games">
 
-- **Extra keys row** on touch screens: Esc, Tab, Ctrl+C, Ctrl+L, arrows, `-` `/` `|` `~`. Keys are
-  delivered as real key presses, so terminal shortcuts and games work.
-- **Keyboard-aware layout**: the terminal shrinks above the on-screen keyboard
-  (`interactive-widget=resizes-content` plus a `visualViewport` fallback for iOS).
-- **Edge to edge**: content respects notches and the navigation bar via `env(safe-area-inset-*)` and
-  the `--safe-area-inset-*` variables Capacitor's SystemBars injects on Android.
-- **No autocorrect on Android**: `captureInput` makes keyboards send plain key events, so commands
-  arrive exactly as typed and keyboards don't learn what you type.
-- **Back button** closes the keyboard, then sends the app to the background (the session is kept).
-- The safe areas and browser chrome follow the terminal theme colour.
+</div>
 
-The bundled plugins are listed in [`src/app/cli-modules.ts`](src/app/cli-modules.ts). All of them run
-on the device; none needs a CLI server.
+## What's inside
 
-## Development
+The [Qodalis CLI](https://cli.qodalis.com) engine with every plugin that runs on the device. None
+needs a server.
 
-Requires Node 22.22+/24.15+. Android builds also need JDK 21 (or 17) and the Android SDK.
+| | |
+| --- | --- |
+| 🛠 **Developer tools** | `guid`, `hash`, `base64`, `jwt`, `regex`, `json`, `csv`, `cron`, string tools, password generator |
+| 📁 **File system** | `ls`, `cd`, `cat`, `grep`, `sed`, `awk`, `find`, `tree`, pipes, aliases, the `nano` editor; files persist on the device |
+| 🌐 **Network** | `curl`, `wget`, `speed-test` (the only commands that go online, and only to the URLs you give) |
+| ✅ **Productivity** | to-do list, stopwatch, QR codes, Markdown, charts |
+| 🎮 **Games** | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle |
+| 🌍 **Languages** | English plus 10 translations |
+
+The bundled plugins are listed in [`src/app/cli-modules.ts`](src/app/cli-modules.ts).
+
+## Made for touch screens
+
+- ⌨️ **Extra keys row**: Esc, Tab, Ctrl+C, Ctrl+L, arrows and `- / | ~`, sent as real key presses so
+  shortcuts and games work.
+- 📐 **Keyboard-aware layout**: the terminal stays above the on-screen keyboard.
+- ✍️ **No autocorrect on Android**: keyboards send plain keys, so commands arrive exactly as typed
+  and keyboards don't learn what you type.
+- 📱 **Edge to edge**: respects notches and the navigation bar; the system bars follow the terminal
+  theme.
+- ↩️ **Back button** closes the keyboard, then backgrounds the app with the session kept.
+- 📴 **Offline**: the PWA is cached by a service worker; the Android app ships everything inside.
+
+## Quick start
+
+Requires Node 22.22+ or 24.15+.
 
 ```bash
 npm install
-npm start                 # dev server on http://localhost:4310
-npm run build             # production build in dist/pwa-cli/browser
-npm run serve:dist        # serve the production build (service worker enabled) on :8080
+npm start               # dev server on http://localhost:4310
+npm run build           # production build in dist/pwa-cli/browser
+npm run serve:dist      # serve the production build (service worker on) on :8080
 ```
 
-## Tests
+### Tests
 
-End-to-end tests use Playwright against the production build, on an emulated Pixel 7 and on desktop
-Chrome:
+Playwright runs the production build on an emulated Pixel 7 and on desktop Chrome: boot, plugin
+commands, file persistence, the extra keys, the layout with the keyboard open, the web manifest,
+offline use and the privacy page.
 
 ```bash
 npm run build
@@ -47,41 +75,63 @@ npx playwright install chromium   # once
 npm test
 ```
 
-They cover boot, running plugin commands, file persistence, the extra keys (Tab completion, history,
-Ctrl+C, Ctrl+L, symbols, focus, games), the layout with the keyboard open, the web manifest, offline
-use through the service worker and the privacy page.
+### Android
 
-## Android
+Needs JDK 21 (or 17) and the Android SDK. `scripts/gradlew.sh` picks the right JDK even when a newer
+one is the default.
 
 ```bash
-npm run android:apk       # debug APK: android/app/build/outputs/apk/debug/app-debug.apk
-npm run android:bundle    # signed release bundle: android/app/build/outputs/bundle/release/app-release.aab
-npm run android:open      # open the project in Android Studio
+npm run android:apk       # debug APK
+npm run android:bundle    # signed release bundle (upload key from android/keystore.properties)
+npm run android:open      # open in Android Studio
 ```
 
-`scripts/gradlew.sh` runs Gradle on JDK 21/17 even when a newer JDK is the default. The release
-bundle is signed with the upload key from `android/keystore.properties` (git-ignored) or the
-`ANDROID_KEYSTORE_*` environment variables.
+## Releases
 
-The version shown in the store comes from `package.json`; `versionCode` is derived from it
-(`1.2.3` → `10203`). Bump the version before every Play upload.
+```mermaid
+flowchart LR
+  F[feature/*] -- PR --> D[develop]
+  D -- CI: signed build --> T[Play internal testing]
+  D -- PR --> M[main]
+  M -- CI: promote the tested build --> P[Play production]
+  M -- CI --> W[PWA on GitHub Pages]
+```
+
+- **Merge into `develop`**: CI tests, builds a signed bundle and rolls it out to internal testers.
+- **Merge into `main`**: CI publishes the PWA and promotes the exact build testers had to production.
+  Nothing is rebuilt.
+
+To release, bump `version` in `package.json` and add release notes in
+`fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (1.2.3 → `10203.txt`). The whole flow,
+secrets and Play Console answers are in [PLAY_STORE.md](PLAY_STORE.md).
+
+Google Play from the command line, with [fastlane](https://fastlane.tools):
+
+```bash
+fastlane status                   # what's on each track, and the next versionCode
+fastlane rollout                  # roll out an internal draft to testers
+fastlane production               # promote the tested build of this version
+fastlane listing images_only:true # upload icon, feature graphic and screenshots
+```
 
 ## Store assets
 
 ```bash
-npm run assets        # icons, adaptive icons and splash from the SVGs in resources/
-npm run screenshots   # Play screenshots + feature graphic (needs a production build)
+npm run assets        # every icon and splash from the SVGs in resources/
+npm run screenshots   # Play screenshots and feature graphic (needs a production build)
 ```
 
-Listing text and images live in [`fastlane/metadata/android/en-US`](fastlane/metadata/android/en-US).
-The privacy policy lives at https://cli.qodalis.com/privacy/ (source in web-cli,
-`apps/docs/src/static/privacy`); [`public/privacy.html`](public/privacy.html) is the copy shipped with
-the PWA, and the `privacy` command shows it in the app. Keep the two in sync.
+The icon lives in [`resources/icon.svg`](resources/icon.svg). Listing text and images are in
+[`fastlane/metadata/android/en-US`](fastlane/metadata/android/en-US). The privacy policy is served at
+https://cli.qodalis.com/privacy/ (source in web-cli, `apps/docs/src/static/privacy`).
+[`public/privacy.html`](public/privacy.html) is the copy shipped with the PWA, and the `privacy`
+command shows it in the app. Keep the two in sync.
 
-Publishing steps, Play Console answers and CI secrets: [PLAY_STORE.md](PLAY_STORE.md).
+## Built with
 
-## CI
-
-- `ci.yml`: pull requests and `develop`: build, Playwright tests, Android debug APK.
-- `release.yml`: pushes to `main`: tests, PWA to GitHub Pages, signed bundle, and upload to the Play
-  internal testing track when `PLAY_SERVICE_ACCOUNT_JSON` is set.
+[Angular 22](https://angular.dev) ·
+[`@qodalis/angular-cli`](https://www.npmjs.com/package/@qodalis/angular-cli) ·
+[xterm.js](https://xtermjs.org) ·
+[Capacitor 8](https://capacitorjs.com) (Android target SDK 36) ·
+[Playwright](https://playwright.dev) ·
+[fastlane](https://fastlane.tools)
