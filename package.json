@@ -1,6 +1,6 @@
 {
   "name": "pwa-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Qodalis CLI for phones: an offline web terminal, installable as a PWA and packaged for Google Play",
   "private": true,
   "scripts": {
@@ -15,7 +15,11 @@
     "cap:sync": "npm run build && cap sync android",
     "android:open": "cap open android",
     "android:apk": "npm run cap:sync && scripts/gradlew.sh assembleDebug",
-    "android:bundle": "npm run cap:sync && scripts/gradlew.sh bundleRelease"
+    "android:bundle": "npm run cap:sync && scripts/gradlew.sh bundleRelease",
+    "play:status": "fastlane status",
+    "play:internal": "fastlane internal",
+    "play:promote": "fastlane promote",
+    "play:listing": "fastlane listing"
   },
   "dependencies": {
     "@angular/common": "^22.2.0",

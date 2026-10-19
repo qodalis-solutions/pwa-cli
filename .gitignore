@@ -45,3 +45,7 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /blob-report/
+
+# fastlane run output
+/fastlane/report.xml
+/fastlane/README.md

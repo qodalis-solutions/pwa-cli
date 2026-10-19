@@ -1,0 +1,4 @@
+# Play Developer API access through the github-play-publisher service account.
+# Override the key location with PLAY_JSON_KEY (CI keeps it in a secret).
+json_key_file(ENV.fetch("PLAY_JSON_KEY", File.expand_path("~/.android-keystores/qodalis-cli-play-publisher.json")))
+package_name("com.qodalis.cli")
