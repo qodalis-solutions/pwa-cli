@@ -1,9 +1,9 @@
 name: Release
 
-# Pushes to main publish the PWA to GitHub Pages (which also hosts the privacy
-# policy linked from the Play listing) and build the signed Play Store bundle.
-# The bundle is uploaded to the Play internal testing track when the
-# PLAY_SERVICE_ACCOUNT_JSON secret is set. See PLAY_STORE.md.
+# Pushes to main publish the PWA to GitHub Pages and promote the build testers
+# already have (uploaded from develop by ci.yml) to Play production. Nothing is
+# rebuilt: production gets exactly the bundle that was tested. Set the
+# PLAY_PRODUCTION_ROLLOUT variable (e.g. 0.2) for a staged rollout. See PLAY_STORE.md.
 on:
   push:
     branches: [main]
@@ -56,50 +56,31 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-  android:
-    name: Signed Play Store bundle
+  # Each native platform gets its own production job (iOS: App Store, later).
+  android-production:
+    name: Promote to Play production
     needs: test
     runs-on: ubuntu-latest
-    env:
-      PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+    concurrency:
+      group: play-upload
+      cancel-in-progress: false
+    environment:
+      name: play-production
+      url: https://play.google.com/store/apps/details?id=com.qodalis.cli
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ruby/setup-ruby@v1
         with:
-          node-version: 24
-          cache: npm
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-          cache: gradle
-      - run: npm ci
-      - name: Restore upload keystore
+          ruby-version: '4.0'
+          bundler-cache: true
+      - name: Restore Play key
         env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
         run: |
-          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
-            echo "::error::ANDROID_KEYSTORE_BASE64 is not set; see PLAY_STORE.md"
+          if [ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            echo "::error::PLAY_SERVICE_ACCOUNT_JSON is not set; see PLAY_STORE.md"
             exit 1
           fi
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload.jks"
-          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-      - name: Build signed bundle
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: npm run android:bundle
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app-release-bundle
-          path: android/app/build/outputs/bundle/release/app-release.aab
-      - name: Upload to Play internal testing
-        if: env.PLAY_SERVICE_ACCOUNT_JSON != ''
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.qodalis.cli
-          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-          track: internal
-          status: ${{ vars.PLAY_RELEASE_STATUS || 'draft' }}
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/play.json"
+          echo "PLAY_JSON_KEY=$RUNNER_TEMP/play.json" >> "$GITHUB_ENV"
+      - run: bundle exec fastlane production rollout:${{ vars.PLAY_PRODUCTION_ROLLOUT || '1' }}
