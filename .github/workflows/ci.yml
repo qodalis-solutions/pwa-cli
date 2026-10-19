@@ -1,5 +1,8 @@
 name: CI
 
+# Pull requests build and test. Pushes to develop also upload a signed build to
+# Play internal testing, so testers get every merge; main later promotes that
+# same build to production (release.yml). See PLAY_STORE.md.
 on:
   pull_request:
     branches: [main, develop]
@@ -8,7 +11,8 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel a develop run midway through a Play upload.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   web:
@@ -33,6 +37,7 @@ jobs:
 
   android:
     name: Android debug build
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,3 +57,54 @@ jobs:
           name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
+
+  testers:
+    name: Upload to Play internal testing
+    if: github.event_name == 'push'
+    needs: web
+    runs-on: ubuntu-latest
+    concurrency:
+      group: play-upload
+      cancel-in-progress: false
+    environment:
+      name: play-internal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+      - run: npm ci
+      - name: Restore upload keystore and Play key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ] || [ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 and PLAY_SERVICE_ACCOUNT_JSON must be set; see PLAY_STORE.md"
+            exit 1
+          fi
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload.jks"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/play.json"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+          echo "PLAY_JSON_KEY=$RUNNER_TEMP/play.json" >> "$GITHUB_ENV"
+      - name: Build and upload
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: bundle exec fastlane internal status:completed
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-release-bundle
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 30

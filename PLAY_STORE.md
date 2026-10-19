@@ -10,7 +10,7 @@ Play Console account owner can do.
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
 | Permissions | `INTERNET` (plus AndroidX's internal, signature-level receiver permission) |
-| Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab` |
+| Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
 
@@ -90,10 +90,21 @@ exempt. Plan for this before the launch date.
 
 Then promote the release to **Production** (or Closed → Production) and submit for review.
 
-## 4. Automated uploads from CI
+## 4. Release flow: develop for testers, main for production
 
-The `Release` workflow builds a signed bundle on every push to `main` and uploads it to the internal
-testing track when the Play service account secret exists.
+| Push to | CI does | Who gets it |
+| --- | --- | --- |
+| pull request | build, Playwright tests, debug APK | nobody |
+| `develop` | tests, then builds a signed bundle and uploads it to **internal testing**, rolled out | internal testers, minutes later |
+| `main` | tests, PWA to GitHub Pages, then **promotes the tested internal build** to production | everyone, after Google's review |
+
+Production gets exactly the bundle testers had: `main` never rebuilds. The `production` lane looks
+for the internal build whose version matches `package.json`, and stops with an error if develop has
+not uploaded it yet. If production already has it (a docs-only merge, a re-run), it does nothing.
+
+Every develop upload takes the next free versionCode from Play (`fastlane status` prints it), so
+several builds of one version can go to testers. Release notes are still named after the version:
+`changelogs/10203.txt` for 1.2.3.
 
 Repository secrets (Settings → Secrets and variables → Actions):
 
@@ -103,24 +114,34 @@ Repository secrets (Settings → Secrets and variables → Actions):
 | `ANDROID_KEYSTORE_PASSWORD` | `storePassword` from `keystore.properties` |
 | `ANDROID_KEY_ALIAS` | `upload` |
 | `ANDROID_KEY_PASSWORD` | `keyPassword` from `keystore.properties` |
-| `PLAY_SERVICE_ACCOUNT_JSON` | JSON key of a Google Cloud service account (optional) |
+| `PLAY_SERVICE_ACCOUNT_JSON` | JSON key of the Google Cloud service account |
 
 For the service account: Google Cloud Console → create a service account and a JSON key; Play Console
 → **Users and permissions → Invite new user** with the service account email, app access to
-*Qodalis CLI*, permission *Release apps to testing tracks*.
+*Qodalis CLI*, permissions *Release to production* and *Release apps to testing tracks*.
 
-Optional repository variable `PLAY_RELEASE_STATUS`: `draft` (default, you roll out from the console)
-or `completed` (testers get it immediately).
+Optional repository variable `PLAY_PRODUCTION_ROLLOUT`: a fraction such as `0.2` for a staged
+rollout to 20% of users (widen it with `fastlane promote from:production to:production rollout:0.5`).
+Unset means everyone.
+
+The upload and promotion jobs run in the GitHub environments `play-internal` and `play-production`.
+Add a required reviewer to `play-production` (Settings → Environments) to approve each production
+release by hand.
 
 Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
 
-## 5. Every release after that
+## 5. Every release
 
-1. Bump `version` in `package.json` (`1.0.1` → versionCode `10001`). Play rejects a bundle whose
-   versionCode was already uploaded.
-2. Add `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
-3. Merge `develop` into `main`. CI tests, publishes the PWA and uploads the bundle to internal testing.
-4. `fastlane rollout` sends the internal draft to testers; `fastlane promote to:beta` (or `to:production`) moves it on.
+1. On a feature branch, bump `version` in `package.json` and add
+   `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (1.0.3 → `10003.txt`, at most 500
+   characters). Merge it into `develop`: testers get the build.
+2. Test it on a phone. Further merges into `develop` upload new builds of the same version.
+3. Open a pull request from `develop` into `main` and merge it: CI promotes the tested build to
+   production.
+
+   Squash merges give `develop` and `main` different histories, so this pull request can report
+   conflicts that are not real. Then branch from `main`, take `develop`'s files
+   (`git checkout origin/develop -- .`), commit, and open the pull request from that branch.
 
 ## Checks done before submission
 
