@@ -1,7 +1,9 @@
 # Google Play from the command line. Run from the repository root:
 #   fastlane status                                   versions on every track
 #   fastlane internal                                 build and upload to internal testing (draft)
-#   fastlane internal status:completed                ...and roll it out to testers
+#   fastlane internal status:completed                ...and roll it out to testers (CI on develop)
+#   fastlane rollout                                  roll out the internal draft
+#   fastlane production                               promote the tested build of this version (CI on main)
 #   fastlane promote to:production rollout:0.1        promote internal -> production at 10%
 #   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
 #   fastlane listing                                  push store text and images
@@ -9,11 +11,36 @@
 #   fastlane listing images_only:true                 push only the icon, feature graphic and screenshots
 #   fastlane pull_listing                             download the listing from Play into fastlane/metadata
 # Listing text, images and release notes live in fastlane/metadata/android.
+# iOS lanes (TestFlight, App Store) will go in a `platform :ios` block, with
+# their metadata in fastlane/metadata/ios.
 
 default_platform(:android)
 
-AAB = "android/app/build/outputs/bundle/release/app-release.aab"
+require "fileutils"
+require "json"
+
+ROOT = File.expand_path("..", __dir__)
+AAB = File.join(ROOT, "android/app/build/outputs/bundle/release/app-release.aab")
+CHANGELOGS = File.join(ROOT, "fastlane/metadata/android/en-US/changelogs")
 TRACKS = %w[internal alpha beta production].freeze
+
+def package_version
+  JSON.parse(File.read(File.join(ROOT, "package.json")))["version"]
+end
+
+# The versionCode android/app/build.gradle derives from package.json (1.2.3 -> 10203);
+# release notes are named after it.
+def derived_version_code
+  major, minor, patch = package_version.split(/[.-]/).first(3).map(&:to_i)
+  major * 10_000 + minor * 100 + patch
+end
+
+# Every upload needs a new versionCode: one above anything on Play, and never
+# below the derived one, so several builds of one version can go to testers.
+def next_version_code
+  used = TRACKS.flat_map { |track| google_play_track_version_codes(track: track) }.map(&:to_i)
+  [used.max.to_i + 1, derived_version_code].max
+end
 
 platform :android do
   desc "Version codes and release names on every track"
@@ -23,19 +50,51 @@ platform :android do
       names = google_play_track_release_names(track: track)
       UI.message("#{track.ljust(10)} #{codes.empty? ? '-' : "#{names.join(', ')} (#{codes.join(', ')})"}")
     end
+    UI.message("next upload: #{package_version} (#{next_version_code})")
   end
 
   desc "Build the signed bundle and upload it to internal testing"
   lane :internal do |options|
-    sh("cd .. && npm run android:bundle")
-    upload_to_play_store(
-      track: "internal",
-      aab: AAB,
-      release_status: options.fetch(:status, "draft"),
-      skip_upload_metadata: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true,
-    )
+    version_code = next_version_code
+    sh("cd #{ROOT} && npm run cap:sync && scripts/gradlew.sh bundleRelease -PversionCode=#{version_code}")
+    # Play reads release notes from changelogs/<versionCode>.txt.
+    notes = File.join(CHANGELOGS, "#{derived_version_code}.txt")
+    copy = File.join(CHANGELOGS, "#{version_code}.txt")
+    temporary = copy != notes && File.exist?(notes) && !File.exist?(copy)
+    FileUtils.cp(notes, copy) if temporary
+    begin
+      upload_to_play_store(
+        track: "internal",
+        aab: AAB,
+        release_status: options.fetch(:status, "draft"),
+        skip_upload_metadata: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+      )
+    ensure
+      FileUtils.rm_f(copy) if temporary
+    end
+    UI.success("Uploaded #{package_version} (#{version_code}) to internal testing")
+  end
+
+  desc "Promote the internal testing build of package.json's version to production"
+  lane :production do |options|
+    version = package_version
+    version_code = google_play_track_version_codes(track: "internal").map(&:to_i).max
+    names = google_play_track_release_names(track: "internal")
+    unless version_code && names.include?(version)
+      UI.user_error!("Internal testing has #{names.join(', ').then { |n| n.empty? ? 'nothing' : n }}, not #{version}. " \
+                     "Merge the version bump into develop and let CI upload it first.")
+    end
+    if google_play_track_version_codes(track: "production").map(&:to_i).include?(version_code)
+      UI.success("#{version} (#{version_code}) is already in production")
+      next
+    end
+    # rollout:0.2 is a staged rollout to 20% of users; empty or 1 means everyone.
+    rollout = options[:rollout].to_s
+    staged = !rollout.empty? && rollout.to_f < 1
+    promote(from: "internal", to: "production", rollout: staged ? rollout : nil)
+    UI.success("Promoted #{version} (#{version_code}) to production")
   end
 
   desc "Promote the latest release of one track to another"
@@ -52,6 +111,27 @@ platform :android do
       # A fraction below 1 is a staged rollout; otherwise everyone gets it.
       rollout: rollout,
       track_promote_release_status: rollout && rollout.to_f < 1 ? "inProgress" : "completed",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "Roll out the draft release on a track to its testers (default: internal)"
+  lane :rollout do |options|
+    track = options.fetch(:track, "internal")
+    version_code = google_play_track_version_codes(track: track).max
+    UI.user_error!("No release on #{track}") unless version_code
+    upload_to_play_store(
+      # Promoting a track's release onto the same track rewrites its status;
+      # release_status alone leaves an existing draft untouched.
+      track: track,
+      track_promote_to: track,
+      version_code: version_code,
+      track_promote_release_status: "completed",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,
