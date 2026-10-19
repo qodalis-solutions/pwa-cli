@@ -56,7 +56,8 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-  production:
+  # Each native platform gets its own production job (iOS: App Store, later).
+  android-production:
     name: Promote to Play production
     needs: test
     runs-on: ubuntu-latest
