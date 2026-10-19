@@ -68,9 +68,12 @@ platform :android do
     version_code = google_play_track_version_codes(track: track).max
     UI.user_error!("No release on #{track}") unless version_code
     upload_to_play_store(
+      # Promoting a track's release onto the same track rewrites its status;
+      # release_status alone leaves an existing draft untouched.
       track: track,
+      track_promote_to: track,
       version_code: version_code,
-      release_status: "completed",
+      track_promote_release_status: "completed",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,
