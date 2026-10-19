@@ -1,0 +1,1 @@
+New terminal app icon. New privacy command: shows the privacy policy in the app, and privacy --open opens the full policy.

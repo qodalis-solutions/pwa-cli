@@ -6,6 +6,7 @@
 #   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
 #   fastlane listing                                  push store text and images
 #   fastlane listing validate:true                    dry run: Google validates, nothing changes
+#   fastlane listing images_only:true                 push only the icon, feature graphic and screenshots
 #   fastlane pull_listing                             download the listing from Play into fastlane/metadata
 # Listing text, images and release notes live in fastlane/metadata/android.
 
@@ -66,6 +67,7 @@ platform :android do
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_changelogs: true,
+      skip_upload_metadata: options.fetch(:images_only, false),
       validate_only: options.fetch(:validate, false),
     )
   end
