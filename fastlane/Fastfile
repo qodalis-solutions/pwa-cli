@@ -2,6 +2,7 @@
 #   fastlane status                                   versions on every track
 #   fastlane internal                                 build and upload to internal testing (draft)
 #   fastlane internal status:completed                ...and roll it out to testers
+#   fastlane rollout                                  roll out the internal draft (CI uploads drafts)
 #   fastlane promote to:production rollout:0.1        promote internal -> production at 10%
 #   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
 #   fastlane listing                                  push store text and images
@@ -52,6 +53,24 @@ platform :android do
       # A fraction below 1 is a staged rollout; otherwise everyone gets it.
       rollout: rollout,
       track_promote_release_status: rollout && rollout.to_f < 1 ? "inProgress" : "completed",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "Roll out the draft release on a track to its testers (default: internal)"
+  lane :rollout do |options|
+    track = options.fetch(:track, "internal")
+    version_code = google_play_track_version_codes(track: track).max
+    UI.user_error!("No release on #{track}") unless version_code
+    upload_to_play_store(
+      track: track,
+      version_code: version_code,
+      release_status: "completed",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,

@@ -120,7 +120,7 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
    versionCode was already uploaded.
 2. Add `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
 3. Merge `develop` into `main`. CI tests, publishes the PWA and uploads the bundle to internal testing.
-4. Promote the release in Play Console.
+4. `fastlane rollout` sends the internal draft to testers; `fastlane promote to:beta` (or `to:production`) moves it on.
 
 ## Checks done before submission
 
