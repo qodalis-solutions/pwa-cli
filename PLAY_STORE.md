@@ -47,7 +47,8 @@ keyPassword=...
 2. **Dashboard → Set up your app**, answer as follows:
    - **Privacy policy**: `https://cli.qodalis.com/privacy/`. The app links to it from the `privacy`
      command, as Play requires.
-   - **App access**: all functionality is available without special access.
+   - **App access** ("Is any part of your app restricted?"): **No**, all functionality is available
+     without special access.
    - **Ads**: the app does not contain ads.
    - **Content rating**: questionnaire category *Utility, Productivity, Communication, or Other*.
      Answer *No* to violence, sexuality, language, controlled substances and gambling. The app can
@@ -70,8 +71,11 @@ keyPassword=...
    - App icon: `images/icon.png` (512×512)
    - Feature graphic: `images/featureGraphic.png` (1024×500)
    - Phone screenshots: `images/phoneScreenshots/*.png` (1080×1920)
-   - Category: *Tools*. Tags: developer tools, terminal. Contact email: required, use a support
+   - Category: *Tools*. Tags (at most 5, from Google's list): *Tools*, *Productivity*, *Network
+     connectivity*, *Clock, alarm & timer*, *Notebook*. Contact email: required, use a support
      address you monitor.
+   - The images can also be pushed with `fastlane listing images_only:true`; `fastlane listing` pushes
+     the text too (title from `title.txt`: *Qodalis CLI: Offline Terminal*).
 
 ## 3. First release (manual)
 
@@ -90,7 +94,24 @@ exempt. Plan for this before the launch date.
 
 Then promote the release to **Production** (or Closed → Production) and submit for review.
 
-## 4. Release flow: develop for testers, main for production
+## 4. Testers
+
+Who can install test builds is set only in Play Console; the Play API cannot read the email lists.
+
+1. **Testing → Internal testing → Testers**: create an email list with the testers' Google accounts,
+   **tick it** and save. Creating the list is not enough.
+2. Under **How testers join your test**, copy the **Join on the web** link and send it to testers.
+3. Each tester opens it in Chrome, signed in with the listed account, taps **Accept invite**, then
+   **download it on Google Play**.
+
+"Not found" on the phone means the account is not on a ticked list, or the Play Store app is signed
+in with another account (switch it under the avatar). A brand-new app or list can take 10–15 minutes
+to show up.
+
+Internal testing skips review ("Not reviewed" next to a release is normal). Open testing and
+production go through Google's review, from hours to days for a new app.
+
+## 5. Release flow: develop for testers, main for production
 
 | Push to | CI does | Who gets it |
 | --- | --- | --- |
@@ -130,7 +151,7 @@ release by hand.
 
 Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
 
-## 5. Every release
+## 6. Every release
 
 1. On a feature branch, bump `version` in `package.json` and add
    `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (1.0.3 → `10003.txt`, at most 500
@@ -142,6 +163,17 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
    Squash merges give `develop` and `main` different histories, so this pull request can report
    conflicts that are not real. Then branch from `main`, take `develop`'s files
    (`git checkout origin/develop -- .`), commit, and open the pull request from that branch.
+
+## Play API notes
+
+- Uploads and promotions report success before Google processes them. To see the real state of each
+  track (status and version codes), use `fastlane status` or check Play Console.
+- A draft release is rolled out with `fastlane rollout`, which promotes the release onto its own
+  track. Passing `release_status: completed` with only a version code reports success but leaves the
+  draft untouched.
+- The service account key for local fastlane runs is
+  `~/.android-keystores/qodalis-cli-play-publisher.json` (override with `PLAY_JSON_KEY`). It needs
+  the *Release to production* and *Release apps to testing tracks* permissions.
 
 ## Checks done before submission
 
