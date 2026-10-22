@@ -1,0 +1,5 @@
+• Typing ahead works: keys typed while a command runs go to the next prompt
+• Up arrow recalls the command you just ran
+• Line editing: Ctrl+A/E, Ctrl+U/K, Ctrl+W, Ctrl+Y, Delete
+• Shows each startup step while the terminal starts
+• Changing the language with configure works at once
