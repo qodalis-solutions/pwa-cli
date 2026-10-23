@@ -73,14 +73,25 @@
     "tslib": "^2.8.0"
   },
   "devDependencies": {
-    "@angular/build": "^22.2.0",
-    "@angular/cli": "^22.2.0",
+    "@angular/build": "^22.2.4",
+    "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^22.2.0",
-    "@capacitor/cli": "^8.0.0",
+    "@capacitor/cli": "^8.5.3",
     "@playwright/test": "^1.64.0",
     "http-server": "^14.1.1",
     "sharp": "^0.35.5",
     "typescript": "~6.0.0"
+  },
+  "overrides": {
+    "@angular/build": {
+      "vite": "^8.3.5"
+    },
+    "@vitejs/plugin-basic-ssl": {
+      "vite": "^8.3.5"
+    },
+    "xcode": {
+      "uuid": "^11.1.1"
+    }
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
