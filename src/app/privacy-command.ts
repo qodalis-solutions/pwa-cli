@@ -30,7 +30,7 @@ export class PrivacyCommandProcessor implements ICliCommandProcessor {
     }
     writer.writeln(writer.wrapInColor('Privacy policy', CliForegroundColor.Cyan));
     writer.writeln('• The app collects no data: no accounts, analytics, ads or tracking.');
-    writer.writeln('• History, settings, files and to-dos are stored only on this device.');
+    writer.writeln('• History, settings, files and to-dos stay on this device (and in your Android backup, if you use one).');
     writer.writeln('• The network is used only by commands you run (curl, wget, speed-test).');
     writer.writeln('• The keyboard is asked not to learn what you type.');
     writer.writeln('');

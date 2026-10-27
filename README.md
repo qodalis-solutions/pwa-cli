@@ -19,7 +19,7 @@ that run offline, with no account and no data collection.
 [Privacy](https://cli.qodalis.com/privacy/)
 
 <img src="public/screenshots/phone-1.png" width="240" alt="Plugin commands">&nbsp;
-<img src="public/screenshots/phone-2.png" width="240" alt="Files and editor">&nbsp;
+<img src="public/screenshots/phone-2.png" width="240" alt="Developer tools: UUIDs, strings, Base64, hashes, passwords">&nbsp;
 <img src="public/screenshots/phone-3.png" width="240" alt="Terminal games">
 
 </div>
@@ -65,7 +65,7 @@ The CLI engine with every plugin that runs on the device; none needs a server. T
 | Network | `curl`, `wget`, `speed-test`: the only commands that go online, and only to the URLs you give |
 | Productivity | To-do list, stopwatch, QR codes, Markdown, charts |
 | Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle |
-| Languages | English plus 10 translations |
+| Languages | English plus 10 translations; starts in the device language when one matches |
 
 The users plugin is left out on purpose: its first-run wizard would ask for an email and password before the terminal
 can be used.
@@ -78,7 +78,7 @@ can be used.
 | Keyboard-aware layout | The terminal stays above the on-screen keyboard (`src/app/viewport.ts`) |
 | No autocorrect on Android | `android.captureInput` in `capacitor.config.ts` makes keyboards send plain keys, so commands arrive exactly as typed |
 | Edge to edge | Respects notches and the navigation bar; the system bars follow the terminal theme |
-| Back button | Closes the keyboard, then backgrounds the app with the session kept |
+| Back button | Closes the keyboard; in a game or prompt presses Escape; otherwise (or pressed twice) backgrounds the app with the session kept |
 | Offline | The PWA is cached by a service worker; the Android app ships everything inside |
 
 ## Development
