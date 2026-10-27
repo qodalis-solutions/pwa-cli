@@ -20,7 +20,7 @@ import { ctrlLetter, EXTRA_KEYS, ExtraKey } from './extra-keys/extra-keys';
 import { ExtraKeysComponent } from './extra-keys/extra-keys.component';
 import { sendKey, sendPress } from './extra-keys/send-key';
 import { StickyModifier } from './extra-keys/sticky-modifier';
-import { GAME_PADS, GamePad, swipeKey } from './games/game-pads';
+import { CommandControls, commandPad, CommandPad, swipeKey } from './command-keys/command-keys';
 import { hideSplash, initNativeShell } from './native/native-shell';
 import { hasTouchKeyboard, trackVisualViewport, watchTouchKeyboard } from './viewport';
 
@@ -47,11 +47,12 @@ export class AppComponent {
   readonly updateReady = signal(false);
   /** The sticky CTRL key of the extra-keys rows. */
   readonly ctrl = new StickyModifier();
-  /** The touch pad of the game being played, on touch screens. */
-  readonly pad = signal<GamePad | undefined>(undefined);
+  /** The keys of the full-screen command running (a game, nano), shown on touch screens. */
+  readonly pad = signal<CommandPad | undefined>(undefined);
   gesture?: { x: number; y: number; time: number };
-  /** The game being played, on any screen (its pad shows on touch screens only). */
-  private game?: GamePad;
+  /** The controls of the running full-screen command, on any screen (its pad shows on touch screens only). */
+  private controls?: CommandControls;
+  private command?: CommandPad;
   readonly playing = signal(false);
 
   private readonly cli = viewChild.required(CliComponent);
@@ -96,8 +97,8 @@ export class AppComponent {
     applyDeviceLanguage(engine);
     const terminal = engine.getTerminal();
     this.destroyRef.onDestroy(this.applyCtrlToKeyboard(terminal));
-    // Games run as the context processor; their pad replaces the extra keys.
-    terminal.onRender(() => this.syncGamePad(engine));
+    // Full-screen commands run as the context processor; their keys replace the extra keys.
+    terminal.onRender(() => this.syncCommandPad(engine));
     this.syncBackground(terminal.options.theme?.background);
     // `theme` commands change the terminal colours at any time.
     terminal.onRender(() => this.syncBackground(terminal.options.theme?.background));
@@ -132,9 +133,9 @@ export class AppComponent {
 
   /** On the board of a game, a touch starts a swipe (or a tap). */
   gestureStart(event: PointerEvent): void {
-    const game = this.game;
+    const pad = this.command;
     const touch = event.pointerType !== 'mouse' || !!this.pad();
-    if (!game || !touch || !(event.target as Element).closest('.terminal')) {
+    if (!pad || !(pad.swipe || pad.tap) || !touch || !(event.target as Element).closest('.terminal')) {
       return;
     }
     // Keeps the board from scrolling, and the focus where it is.
@@ -145,39 +146,42 @@ export class AppComponent {
   /** A swipe sends the arrow in its direction; a quick tap sends the game's tap key. */
   gestureEnd(event: PointerEvent): void {
     const start = this.gesture;
-    const game = this.game;
+    const pad = this.command;
     this.gesture = undefined;
-    if (!start || !game) {
+    if (!start || !pad) {
       return;
     }
-    const key =
-      swipeKey(event.clientX - start.x, event.clientY - start.y) ??
-      (Date.now() - start.time < 300 ? game.tap : undefined);
+    const swipe = pad.swipe ? swipeKey(event.clientX - start.x, event.clientY - start.y) : undefined;
+    const key = swipe ?? (Date.now() - start.time < 300 ? pad.tap : undefined);
     if (key) {
       this.onGameKey(key);
     }
   }
 
   /**
-   * While a game runs, shows its pad on touch screens and closes the
-   * on-screen keyboard so the board gets the screen. The terminal keeps
-   * focus (inputmode none only hides the soft keyboard), so a hardware
-   * keyboard still plays; the soft keyboard comes back at the prompt.
+   * While a full-screen command runs, shows the keys it declares (its
+   * `controls`) on touch screens. Games get big buttons and the on-screen
+   * keyboard closes so the board gets the screen; commands that read typed
+   * text (nano) keep it, with a compact row. The terminal keeps focus either
+   * way (inputmode none only hides the soft keyboard), so a hardware
+   * keyboard still works.
    */
-  private syncGamePad(engine: CliEngine): void {
-    const command = engine.getContext()?.contextProcessor?.command;
-    const game = command ? GAME_PADS[command] : undefined;
-    const pad = this.showKeys() ? game : undefined;
-    if (game !== this.game) {
-      this.game = game;
-      this.playing.set(!!game);
+  private syncCommandPad(engine: CliEngine): void {
+    const processor = engine.getContext()?.contextProcessor as { controls?: CommandControls } | undefined;
+    const controls = processor?.controls;
+    if (controls !== this.controls) {
+      this.controls = controls;
+      this.command = controls ? commandPad(controls) : undefined;
+      const board = !!controls && !controls.textInput;
+      this.playing.set(board);
       const textarea = engine.getTerminal().textarea;
-      if (game) {
+      if (board) {
         textarea?.setAttribute('inputmode', 'none');
       } else {
         textarea?.removeAttribute('inputmode');
       }
     }
+    const pad = this.showKeys() ? this.command : undefined;
     if (pad !== this.pad()) {
       this.pad.set(pad);
     }

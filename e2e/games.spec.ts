@@ -37,7 +37,7 @@ test.describe('games on touch screens', () => {
   test('a game swaps the extra keys for its pad and closes the on-screen keyboard', async ({ page }) => {
     await startGame(page, 'tetris');
     await expect(pad(page).locator('[data-key="Rotate"]')).toBeVisible();
-    await expect(pad(page).locator('[data-key="Drop"]')).toBeVisible();
+    await expect(pad(page).locator('[data-key="Hard drop"]')).toBeVisible();
     expect(await softKeyboardHidden(page)).toBe(true);
     // The terminal keeps focus, so a hardware keyboard still plays.
     expect(await textareaFocused(page)).toBe(true);
@@ -51,7 +51,7 @@ test.describe('games on touch screens', () => {
     }
 
     // Leaving the game brings back the extra keys and the keyboard.
-    await tapKey(page, 'Escape');
+    await tapKey(page, 'Quit'); // the game's Esc key
     await expect(pad(page)).toHaveCount(0);
     await expect(page.locator('app-extra-keys [data-key="Control"]')).toBeVisible();
     await expect.poll(() => softKeyboardHidden(page)).toBe(false);
@@ -106,16 +106,38 @@ test.describe('games on touch screens', () => {
   test('sudoku gets a digit row', async ({ page }) => {
     await startGame(page, 'sudoku');
     for (let d = 1; d <= 9; d++) {
-      await expect(pad(page).locator(`[data-key="Digit ${d}"]`)).toBeVisible();
+      await expect(pad(page).locator(`[data-key="Enter ${d}"]`)).toBeVisible();
     }
   });
 
-  test('wordle keeps the keyboard and the extra keys', async ({ page }) => {
+  test('wordle keeps the keyboard, with its keys in a compact row', async ({ page }) => {
     await openTerminal(page);
     await run(page, 'wordle', { wait: false });
     await expect.poll(() => terminalText(page), { timeout: 10_000 }).toMatch(/wordle/i);
+    const row = page.locator('app-extra-keys');
+    await expect(row.locator('[data-key="Submit the guess"]')).toBeVisible();
     await expect(pad(page)).toHaveCount(0);
-    await expect(page.locator('app-extra-keys [data-key="Control"]')).toBeVisible();
+    expect(await softKeyboardHidden(page)).toBe(false);
+  });
+
+  test('nano shows its shortcuts and keeps the keyboard', async ({ page }) => {
+    await openTerminal(page);
+    await run(page, 'nano notes.txt', { wait: false });
+    const row = page.locator('app-extra-keys');
+    await expect(row.locator('[data-key="Save the file"]')).toBeVisible({ timeout: 10_000 });
+    for (const name of ['Exit (asks to save changes)', 'Search', 'Cut the line', 'Paste the cut text', 'Page up']) {
+      await expect(row.locator(`[data-key="${name}"]`)).toBeVisible();
+    }
+    expect(await softKeyboardHidden(page)).toBe(false);
+    expect(await textareaFocused(page)).toBe(true);
+
+    // Type, save with the Save key, exit with the Exit key.
+    await page.keyboard.type('written on the phone');
+    await row.locator('[data-key="Save the file"]').tap();
+    await row.locator('[data-key="Exit (asks to save changes)"]').tap();
+    await expect(row.locator('[data-key="Control"]')).toBeVisible({ timeout: 10_000 });
+    await run(page, 'cat notes.txt');
+    await expect.poll(() => terminalText(page)).toContain('written on the phone');
   });
 });
 

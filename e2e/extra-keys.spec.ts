@@ -162,7 +162,7 @@ test.describe('extra keys row', () => {
       await tapKey(page, key);
     }
     await expect.poll(() => terminalText(page)).not.toBe(before);
-    await tapKey(page, 'Escape');
+    await tapKey(page, 'Quit'); // the game's Esc key
   });
 
   test('stays above the on-screen keyboard', async ({ page }) => {
