@@ -8,6 +8,7 @@ import { curlModule } from '@qodalis/cli-curl';
 import { encodeModule } from '@qodalis/cli-encode';
 import { filesModule } from '@qodalis/cli-files';
 import { guidModule } from '@qodalis/cli-guid';
+import { usersModule } from '@qodalis/cli-users';
 import { langDeModule } from '@qodalis/cli-lang-de';
 import { langEsModule } from '@qodalis/cli-lang-es';
 import { langFrModule } from '@qodalis/cli-lang-fr';
@@ -47,6 +48,8 @@ import { appModule } from './privacy-command';
 export const CLI_MODULES: ICliModule[] = [
   // App commands (privacy policy)
   appModule,
+  // Local user accounts: first launch asks for the owner's account
+  usersModule,
   deviceModule,
   // Tools
   guidModule,

@@ -25,10 +25,51 @@ export async function currentLine(page: Page): Promise<string> {
   });
 }
 
-/** Opens the app and waits until the terminal shows its prompt. */
+/** The test account the first-run setup creates. */
+export const TEST_USER = { name: 'tester', email: 'tester@example.com', password: 'Test-passw0rd!' };
+
+/** The lines drawn by the terminal, read from the DOM (works before the engine is ready). */
+async function drawnLines(page: Page): Promise<string[]> {
+  return (await page.locator('.xterm-rows').innerText()).split('\n').map((l) => l.trimEnd()).filter(Boolean);
+}
+
+/**
+ * Answers the users plugin's first-run setup (shown on a fresh install, before
+ * the engine reports ready) with {@link TEST_USER}. Returns once the app is ready.
+ */
+export async function completeFirstRunSetup(page: Page): Promise<void> {
+  const ready = () => page.evaluate(() => !!(window as any).qodalisCli);
+  const deadline = Date.now() + 30_000;
+  // The screen when the last answer was typed: the next one waits for a new prompt.
+  let answered = '';
+  while (!(await ready())) {
+    const lines = await drawnLines(page);
+    const line = lines[lines.length - 1] ?? '';
+    if (Date.now() > deadline) throw new Error(`The app did not get ready; last line: ${line}`);
+    const screen = lines.join('\n');
+    const answer = /Username:\s*$/.test(line)
+      ? TEST_USER.name
+      : /Email:\s*$/.test(line)
+        ? TEST_USER.email
+        : /Full name.*:\s*$/.test(line) || /Home directory.*:\s*$/.test(line)
+          ? ''
+          : /[Pp]assword.*:\s*$/.test(line)
+            ? TEST_USER.password
+            : undefined;
+    if (answer !== undefined && screen !== answered) {
+      await page.locator('.xterm-helper-textarea').focus();
+      await page.keyboard.type(answer);
+      await page.keyboard.press('Enter');
+      answered = screen;
+    }
+    await page.waitForTimeout(200);
+  }
+}
+
+/** Opens the app (creating the test account on a fresh install) and waits for the prompt. */
 export async function openTerminal(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => !!(window as any).qodalisCli, null, { timeout: 30_000 });
+  await completeFirstRunSetup(page);
   await expect.poll(() => currentLine(page), { timeout: 15_000 }).toMatch(/[$#>]\s*$/);
 }
 
