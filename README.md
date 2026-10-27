@@ -64,7 +64,7 @@ The CLI engine with every plugin that runs on the device; none needs a server. T
 | File system | `ls`, `cd`, `cat`, `grep`, `sed`, `awk`, `find`, `tree`, pipes, aliases and the `nano` editor; files persist on the device |
 | Network | `curl`, `wget`, `speed-test`: the only commands that go online, and only to the URLs you give |
 | Productivity | To-do list, stopwatch, QR codes, Markdown, charts |
-| Users | First launch creates your account; `whoami`, `adduser`, `su`, `passwd`, `login`/`logout`, groups and permissions |
+| Users | First launch creates your account and keeps you signed in; `whoami`, `adduser`, `su`, `passwd`, `login`/`logout`, groups and permissions |
 | Phone | `device`, `battery`, `network`, `share` (text or piped output, to any app), `vibrate`, `toast` |
 | Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle; play by touch (pads, swipes, taps) or keyboard |
 | Languages | English plus 10 translations; starts in the device language when one matches |
@@ -77,7 +77,7 @@ in; later launches restore the session. Accounts stay on the device.
 | Feature | Details |
 | --- | --- |
 | Extra keys | Two rows: Esc, Tab, Ctrl+C, Home, End, Del, arrows and `/ \| -`, sent as real key presses (`src/app/extra-keys/`). CTRL is sticky: tap it, then a key (also on the keyboard: Ctrl+A/E/U/K/W/L); double-tap locks it. Held arrows and Del repeat |
-| Game pads | In a game the keys become big game buttons (`src/app/games/game-pads.ts`); swipes on the board send arrows, a tap rotates (Tetris) or reveals (Minesweeper). The on-screen keyboard closes but a hardware keyboard keeps working; Wordle keeps the keyboard |
+| Command keys | Full-screen commands declare the keys they read (`controls` in `@qodalis/cli-core`), shown in place of the extra keys (`src/app/command-keys/`). Games get big buttons, swipes send arrows and a tap rotates (Tetris) or reveals (Minesweeper), and the on-screen keyboard closes while a hardware keyboard keeps working. `nano` (Save, Exit, Find, Cut, Paste, PgUp/PgDn), Wordle and other text commands keep the keyboard with a compact row |
 | Keyboard-aware layout | The terminal stays above the on-screen keyboard (`src/app/viewport.ts`) |
 | No autocorrect on Android | `android.captureInput` in `capacitor.config.ts` makes keyboards send plain keys, so commands arrive exactly as typed |
 | Edge to edge | Respects notches and the navigation bar; the system bars follow the terminal theme |

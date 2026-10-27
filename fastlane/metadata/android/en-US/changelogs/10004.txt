@@ -1,8 +1,8 @@
-• Games: big touch buttons, swipes and taps; keyboards still work
+• Touch keys for games (swipes, taps) and nano (Save, Exit, Cut, Paste)
 • Two rows of extra keys with HOME, END, DEL; sticky CTRL for shortcuts
 • User accounts: the first launch creates yours
 • Starts in your phone's language when a pack exists
 • Back leaves games and prompts before closing the app
 • Phone commands: device, battery, network, share, vibrate, toast
 • Fixes: options on sub-commands, secure passwords, string and rot
-• Built on Qodalis CLI 2.0.0-rc.3
+• Built on Qodalis CLI 2.0.0-rc.4

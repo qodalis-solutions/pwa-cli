@@ -6,8 +6,8 @@
   (pointercancel)="gesture = undefined"
 >
   <cli class="terminal" [options]="options" [modules]="modules" (engineReady)="onEngineReady($event)" />
-  @if (pad(); as gamePad) {
-    <app-extra-keys class="game" [rows]="gamePad.rows" (key)="onGameKey($event)" />
+  @if (pad(); as commandPad) {
+    <app-extra-keys [class.game]="!commandPad.compact" [rows]="commandPad.rows" (key)="onGameKey($event)" />
   } @else if (showKeys()) {
     <app-extra-keys [ctrl]="ctrl.state()" (key)="onExtraKey($event)" />
   }

@@ -48,8 +48,9 @@ import { appModule } from './privacy-command';
 export const CLI_MODULES: ICliModule[] = [
   // App commands (privacy policy)
   appModule,
-  // Local user accounts: first launch asks for the owner's account
-  usersModule,
+  // Local user accounts: first launch asks for the owner's account, who
+  // stays signed in on their phone until they sign out
+  usersModule.configure({ maxSessionLifetime: 0 }),
   deviceModule,
   // Tools
   guidModule,
