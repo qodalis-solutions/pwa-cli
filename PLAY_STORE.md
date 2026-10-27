@@ -180,6 +180,6 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
 - `npm test`: Playwright suite on Pixel 7 emulation and desktop Chrome.
 - Release APK installed on an Android 16 (API 36) emulator: boots in about 2.4 s with R8 minification
   on, typing through Gboard arrives exactly, extra keys and Tab completion work, the layout stays
-  above the keyboard, Back closes the keyboard then backgrounds the app with the session kept.
+  above the keyboard, Back closes the keyboard, leaves a game or prompt (Escape), then backgrounds the app with the session kept.
 - `apksigner verify`: signed with the upload key; `aapt2 dump badging`: target SDK 36, `INTERNET` is
   the only user-facing permission.
