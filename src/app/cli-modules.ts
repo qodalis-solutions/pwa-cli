@@ -35,6 +35,7 @@ import { wgetModule } from '@qodalis/cli-wget';
 import { wordleModule } from '@qodalis/cli-wordle';
 import { yesnoModule } from '@qodalis/cli-yesno';
 
+import { deviceModule } from './device-commands';
 import { appModule } from './privacy-command';
 
 /**
@@ -46,6 +47,7 @@ import { appModule } from './privacy-command';
 export const CLI_MODULES: ICliModule[] = [
   // App commands (privacy policy)
   appModule,
+  deviceModule,
   // Tools
   guidModule,
   stringModule,
