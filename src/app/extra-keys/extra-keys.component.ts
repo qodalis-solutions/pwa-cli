@@ -12,8 +12,8 @@ const REPEAT_INTERVAL_MS = 60;
   selector: 'app-extra-keys',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @for (row of rows; track $index) {
-      <div class="row">
+    @for (row of rows(); track $index) {
+      <div class="row" [style.grid-template-columns]="'repeat(' + row.length + ', minmax(0, 1fr))'">
         @for (k of row; track k.name) {
           <button
             type="button"
@@ -50,8 +50,19 @@ const REPEAT_INTERVAL_MS = 60;
 
     .row
       display: grid
-      grid-template-columns: repeat(7, minmax(0, 1fr))
       gap: 2px
+
+    :host(.game)
+      gap: 4px
+      padding: 6px
+
+    :host(.game) .row
+      gap: 4px
+
+    :host(.game) button
+      min-height: 52px
+      border-color: var(--keys-border)
+      font-size: 15px
 
     button
       min-width: 0
@@ -79,7 +90,8 @@ const REPEAT_INTERVAL_MS = 60;
   host: { role: 'toolbar', 'aria-label': 'Terminal keys' },
 })
 export class ExtraKeysComponent {
-  readonly rows = EXTRA_KEY_ROWS;
+  /** The keys, row by row: the extra keys, or a game's pad. */
+  readonly rows = input<ExtraKey[][]>(EXTRA_KEY_ROWS);
   /** State of the sticky CTRL key, shown on its button. */
   readonly ctrl = input<ModifierState>('off');
   readonly key = output<ExtraKey>();

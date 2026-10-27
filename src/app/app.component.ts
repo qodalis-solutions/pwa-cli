@@ -20,6 +20,7 @@ import { ctrlLetter, EXTRA_KEYS, ExtraKey } from './extra-keys/extra-keys';
 import { ExtraKeysComponent } from './extra-keys/extra-keys.component';
 import { sendKey, sendPress } from './extra-keys/send-key';
 import { StickyModifier } from './extra-keys/sticky-modifier';
+import { GAME_PADS, GamePad, swipeKey } from './games/game-pads';
 import { hideSplash, initNativeShell } from './native/native-shell';
 import { hasTouchKeyboard, trackVisualViewport, watchTouchKeyboard } from './viewport';
 
@@ -46,6 +47,12 @@ export class AppComponent {
   readonly updateReady = signal(false);
   /** The sticky CTRL key of the extra-keys rows. */
   readonly ctrl = new StickyModifier();
+  /** The touch pad of the game being played, on touch screens. */
+  readonly pad = signal<GamePad | undefined>(undefined);
+  gesture?: { x: number; y: number; time: number };
+  /** The game being played, on any screen (its pad shows on touch screens only). */
+  private game?: GamePad;
+  readonly playing = signal(false);
 
   private readonly cli = viewChild.required(CliComponent);
   private background = '';
@@ -89,6 +96,8 @@ export class AppComponent {
     applyDeviceLanguage(engine);
     const terminal = engine.getTerminal();
     this.destroyRef.onDestroy(this.applyCtrlToKeyboard(terminal));
+    // Games run as the context processor; their pad replaces the extra keys.
+    terminal.onRender(() => this.syncGamePad(engine));
     this.syncBackground(terminal.options.theme?.background);
     // `theme` commands change the terminal colours at any time.
     terminal.onRender(() => this.syncBackground(terminal.options.theme?.background));
@@ -111,6 +120,66 @@ export class AppComponent {
       sendPress(terminal, ctrlPress);
     } else {
       sendKey(terminal, key);
+    }
+  }
+
+  onGameKey(key: ExtraKey): void {
+    const terminal = this.cli().getEngine()?.getTerminal();
+    if (terminal) {
+      sendKey(terminal, key);
+    }
+  }
+
+  /** On the board of a game, a touch starts a swipe (or a tap). */
+  gestureStart(event: PointerEvent): void {
+    const game = this.game;
+    const touch = event.pointerType !== 'mouse' || !!this.pad();
+    if (!game || !touch || !(event.target as Element).closest('.terminal')) {
+      return;
+    }
+    // Keeps the board from scrolling, and the focus where it is.
+    event.preventDefault();
+    this.gesture = { x: event.clientX, y: event.clientY, time: Date.now() };
+  }
+
+  /** A swipe sends the arrow in its direction; a quick tap sends the game's tap key. */
+  gestureEnd(event: PointerEvent): void {
+    const start = this.gesture;
+    const game = this.game;
+    this.gesture = undefined;
+    if (!start || !game) {
+      return;
+    }
+    const key =
+      swipeKey(event.clientX - start.x, event.clientY - start.y) ??
+      (Date.now() - start.time < 300 ? game.tap : undefined);
+    if (key) {
+      this.onGameKey(key);
+    }
+  }
+
+  /**
+   * While a game runs, shows its pad on touch screens and closes the
+   * on-screen keyboard so the board gets the screen. The terminal keeps
+   * focus (inputmode none only hides the soft keyboard), so a hardware
+   * keyboard still plays; the soft keyboard comes back at the prompt.
+   */
+  private syncGamePad(engine: CliEngine): void {
+    const command = engine.getContext()?.contextProcessor?.command;
+    const game = command ? GAME_PADS[command] : undefined;
+    const pad = this.showKeys() ? game : undefined;
+    if (game !== this.game) {
+      this.game = game;
+      this.playing.set(!!game);
+      const textarea = engine.getTerminal().textarea;
+      if (game) {
+        textarea?.setAttribute('inputmode', 'none');
+      } else {
+        textarea?.removeAttribute('inputmode');
+      }
+    }
+    if (pad !== this.pad()) {
+      this.pad.set(pad);
     }
   }
 

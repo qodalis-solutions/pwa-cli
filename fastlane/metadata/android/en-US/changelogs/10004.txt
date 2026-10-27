@@ -1,7 +1,7 @@
+• Games: big touch buttons, swipes and taps; keyboards still work
+• Two rows of extra keys with HOME, END, DEL; sticky CTRL for shortcuts
 • Starts in your phone's language when a language pack exists for it
 • Back leaves games and prompts before closing the app
-• Options with a value work on sub-commands, e.g. dice roll --sides 6
-• Passwords are generated with the secure random generator
-• String commands report a missing --find instead of matching everything
-• rot --shift=0 leaves the text unchanged
+• Options with a value work on sub-commands
+• Secure password generation; string and rot fixes
 • Built on Qodalis CLI 2.0.0-rc.3
