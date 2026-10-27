@@ -64,7 +64,7 @@ The CLI engine with every plugin that runs on the device; none needs a server. T
 | File system | `ls`, `cd`, `cat`, `grep`, `sed`, `awk`, `find`, `tree`, pipes, aliases and the `nano` editor; files persist on the device |
 | Network | `curl`, `wget`, `speed-test`: the only commands that go online, and only to the URLs you give |
 | Productivity | To-do list, stopwatch, QR codes, Markdown, charts |
-| Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle |
+| Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle; play by touch (pads, swipes, taps) or keyboard |
 | Languages | English plus 10 translations; starts in the device language when one matches |
 
 The users plugin is left out on purpose: its first-run wizard would ask for an email and password before the terminal
@@ -74,7 +74,8 @@ can be used.
 
 | Feature | Details |
 | --- | --- |
-| Extra keys row | Esc, Tab, Ctrl+C, Ctrl+L, arrows and `- / \| ~`, sent as real key presses so shortcuts and games work (`src/app/extra-keys/`) |
+| Extra keys | Two rows: Esc, Tab, Ctrl+C, Home, End, Del, arrows and `/ \| -`, sent as real key presses (`src/app/extra-keys/`). CTRL is sticky: tap it, then a key (also on the keyboard: Ctrl+A/E/U/K/W/L); double-tap locks it. Held arrows and Del repeat |
+| Game pads | In a game the keys become big game buttons (`src/app/games/game-pads.ts`); swipes on the board send arrows, a tap rotates (Tetris) or reveals (Minesweeper). The on-screen keyboard closes but a hardware keyboard keeps working; Wordle keeps the keyboard |
 | Keyboard-aware layout | The terminal stays above the on-screen keyboard (`src/app/viewport.ts`) |
 | No autocorrect on Android | `android.captureInput` in `capacitor.config.ts` makes keyboards send plain keys, so commands arrive exactly as typed |
 | Edge to edge | Respects notches and the navigation bar; the system bars follow the terminal theme |

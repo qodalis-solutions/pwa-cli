@@ -1,6 +1,14 @@
-<main class="shell">
+<main
+  class="shell"
+  [class.playing]="playing()"
+  (pointerdown)="gestureStart($event)"
+  (pointerup)="gestureEnd($event)"
+  (pointercancel)="gesture = undefined"
+>
   <cli class="terminal" [options]="options" [modules]="modules" (engineReady)="onEngineReady($event)" />
-  @if (showKeys()) {
+  @if (pad(); as gamePad) {
+    <app-extra-keys class="game" [rows]="gamePad.rows" (key)="onGameKey($event)" />
+  } @else if (showKeys()) {
     <app-extra-keys [ctrl]="ctrl.state()" (key)="onExtraKey($event)" />
   }
 </main>
