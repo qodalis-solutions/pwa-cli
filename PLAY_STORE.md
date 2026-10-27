@@ -9,7 +9,7 @@ Play Console account owner can do.
 | Package name | `com.qodalis.cli` (permanent once published) |
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
-| Permissions | `INTERNET` (plus AndroidX's internal, signature-level receiver permission) |
+| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). No data is collected, so the Data safety answers are unchanged |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
@@ -182,4 +182,4 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
   on, typing through Gboard arrives exactly, extra keys and Tab completion work, the layout stays
   above the keyboard, Back closes the keyboard, leaves a game or prompt (Escape), then backgrounds the app with the session kept.
 - `apksigner verify`: signed with the upload key; `aapt2 dump badging`: target SDK 36, `INTERNET` is
-  the only user-facing permission.
+  the only user-facing permission (up to 1.0.3; 1.0.4 adds the install-time `ACCESS_NETWORK_STATE` and `VIBRATE`).

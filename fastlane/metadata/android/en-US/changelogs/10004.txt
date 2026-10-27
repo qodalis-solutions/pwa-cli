@@ -2,6 +2,6 @@
 • Two rows of extra keys with HOME, END, DEL; sticky CTRL for shortcuts
 • Starts in your phone's language when a language pack exists for it
 • Back leaves games and prompts before closing the app
-• Options with a value work on sub-commands
-• Secure password generation; string and rot fixes
+• Phone commands: device, battery, network, share, vibrate, toast
+• Fixes: options on sub-commands, secure passwords, string and rot
 • Built on Qodalis CLI 2.0.0-rc.3

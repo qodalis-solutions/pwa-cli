@@ -64,6 +64,7 @@ The CLI engine with every plugin that runs on the device; none needs a server. T
 | File system | `ls`, `cd`, `cat`, `grep`, `sed`, `awk`, `find`, `tree`, pipes, aliases and the `nano` editor; files persist on the device |
 | Network | `curl`, `wget`, `speed-test`: the only commands that go online, and only to the URLs you give |
 | Productivity | To-do list, stopwatch, QR codes, Markdown, charts |
+| Phone | `device`, `battery`, `network`, `share` (text or piped output, to any app), `vibrate`, `toast` |
 | Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle; play by touch (pads, swipes, taps) or keyboard |
 | Languages | English plus 10 translations; starts in the device language when one matches |
 
