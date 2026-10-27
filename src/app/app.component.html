@@ -1,9 +1,20 @@
-<main class="shell">
+<main
+  class="shell"
+  [class.playing]="playing()"
+  (pointerdown)="gestureStart($event)"
+  (pointerup)="gestureEnd($event)"
+  (pointercancel)="gesture = undefined"
+>
   <cli class="terminal" [options]="options" [modules]="modules" (engineReady)="onEngineReady($event)" />
-  @if (showKeys()) {
-    <app-extra-keys (key)="onExtraKey($event)" />
+  @if (pad(); as commandPad) {
+    <app-extra-keys [class.game]="!commandPad.compact" [rows]="commandPad.rows" (key)="onGameKey($event)" />
+  } @else if (showKeys()) {
+    <app-extra-keys [ctrl]="ctrl.state()" (key)="onExtraKey($event)" />
   }
 </main>
 @if (updateReady()) {
-  <button type="button" class="update" (click)="reload()">A new version is ready. Tap to reload.</button>
+  <div class="update" role="status">
+    <button type="button" class="update-reload" (click)="reload()">A new version is ready. Tap to reload.</button>
+    <button type="button" class="update-dismiss" aria-label="Dismiss" (click)="updateReady.set(false)">✕</button>
+  </div>
 }

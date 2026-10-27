@@ -25,7 +25,8 @@ const shots: { name: string; script: (page: import('@playwright/test').Page) => 
   {
     name: 'phone-2',
     script: async (page) => {
-      await tapKey(page, 'Control L');
+      await tapKey(page, 'Control');
+      await page.keyboard.type('l');
       await run(page, 'guid new');
       await run(page, 'string upper hello from my phone');
       await run(page, 'base64 encode qodalis');

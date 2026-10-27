@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      # The CLI packages are released together; bump them in one PR.
+      qodalis:
+        patterns: ['@qodalis/*']
+      angular:
+        patterns: ['@angular/*', '@angular-devkit/*']
+      capacitor:
+        patterns: ['@capacitor/*']
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly

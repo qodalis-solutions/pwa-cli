@@ -8,6 +8,7 @@ import { curlModule } from '@qodalis/cli-curl';
 import { encodeModule } from '@qodalis/cli-encode';
 import { filesModule } from '@qodalis/cli-files';
 import { guidModule } from '@qodalis/cli-guid';
+import { usersModule } from '@qodalis/cli-users';
 import { langDeModule } from '@qodalis/cli-lang-de';
 import { langEsModule } from '@qodalis/cli-lang-es';
 import { langFrModule } from '@qodalis/cli-lang-fr';
@@ -35,6 +36,7 @@ import { wgetModule } from '@qodalis/cli-wget';
 import { wordleModule } from '@qodalis/cli-wordle';
 import { yesnoModule } from '@qodalis/cli-yesno';
 
+import { deviceModule } from './device-commands';
 import { appModule } from './privacy-command';
 
 /**
@@ -46,6 +48,10 @@ import { appModule } from './privacy-command';
 export const CLI_MODULES: ICliModule[] = [
   // App commands (privacy policy)
   appModule,
+  // Local user accounts: first launch asks for the owner's account, who
+  // stays signed in on their phone until they sign out
+  usersModule.configure({ maxSessionLifetime: 0 }),
+  deviceModule,
   // Tools
   guidModule,
   stringModule,

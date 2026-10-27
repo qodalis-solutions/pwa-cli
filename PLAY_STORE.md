@@ -9,7 +9,7 @@ Play Console account owner can do.
 | Package name | `com.qodalis.cli` (permanent once published) |
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
-| Permissions | `INTERNET` (plus AndroidX's internal, signature-level receiver permission) |
+| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). No data is collected, so the Data safety answers are unchanged |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
@@ -59,11 +59,13 @@ keyPassword=...
    - **Financial features**: none. **Health**: none.
    - **Data safety**:
      - Does your app collect or share any of the required user data types? **No.**
-     - Data is stored on the device only (to-do items, files, history, settings) and never sent to
-       the developer, which Play does not count as collection.
+     - Data is stored on the device only (the user account, to-do items, files, history, settings)
+       and never sent to the developer, which Play does not count as collection.
      - Is all user data encrypted in transit? Not applicable (no data collected); answer per the
        form if asked.
-     - Account deletion: not applicable, the app has no accounts.
+     - Account deletion (since 1.0.4 the first launch creates a local user account): the account
+       lives only on the device; deletion is `userdel`, clearing storage or uninstalling. If the
+       form asks for a deletion URL, use https://cli.qodalis.com/privacy/#delete-account.
 3. **Store listing**: copy from `fastlane/metadata/android/en-US/`:
    - App name: `title.txt` (≤ 30 chars)
    - Short description: `short_description.txt` (≤ 80 chars)
@@ -180,6 +182,6 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
 - `npm test`: Playwright suite on Pixel 7 emulation and desktop Chrome.
 - Release APK installed on an Android 16 (API 36) emulator: boots in about 2.4 s with R8 minification
   on, typing through Gboard arrives exactly, extra keys and Tab completion work, the layout stays
-  above the keyboard, Back closes the keyboard then backgrounds the app with the session kept.
+  above the keyboard, Back closes the keyboard, leaves a game or prompt (Escape), then backgrounds the app with the session kept.
 - `apksigner verify`: signed with the upload key; `aapt2 dump badging`: target SDK 36, `INTERNET` is
-  the only user-facing permission.
+  the only user-facing permission (up to 1.0.3; 1.0.4 adds the install-time `ACCESS_NETWORK_STATE` and `VIBRATE`).

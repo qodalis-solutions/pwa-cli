@@ -5,6 +5,7 @@
   --keys-bg: #111418
   --keys-fg: #d7dde5
   --keys-border: #262b33
+  --keys-accent: #5aa9f0
   --inset-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))
   --inset-right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px))
   --inset-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px))
@@ -21,3 +22,19 @@ body
   overscroll-behavior: none
   -webkit-tap-highlight-color: transparent
   -webkit-text-size-adjust: 100%
+
+// `toast` in the PWA (the Android app uses the system toast)
+.app-toast
+  position: fixed
+  left: 50%
+  bottom: calc(var(--inset-bottom) + 120px)
+  transform: translateX(-50%)
+  max-width: min(90vw, 480px)
+  padding: 10px 16px
+  border-radius: 20px
+  background: rgba(40, 44, 52, 0.95)
+  color: #fff
+  font: 500 14px/1.35 system-ui, sans-serif
+  text-align: center
+  z-index: 10
+  pointer-events: none

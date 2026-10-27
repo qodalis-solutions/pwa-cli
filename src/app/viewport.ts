@@ -23,5 +23,18 @@ export function trackVisualViewport(): () => void {
 
 /** True on phones and tablets, where the extra-keys row is useful. */
 export function hasTouchKeyboard(): boolean {
-  return window.matchMedia('(pointer: coarse)').matches;
+  return window.matchMedia(COARSE_POINTER).matches;
 }
+
+/**
+ * Calls `onChange` when a keyboard or mouse is attached or removed (tablets,
+ * foldables, Chromebooks). Returns the function that stops listening.
+ */
+export function watchTouchKeyboard(onChange: (touch: boolean) => void): () => void {
+  const query = window.matchMedia(COARSE_POINTER);
+  const listener = (e: MediaQueryListEvent) => onChange(e.matches);
+  query.addEventListener('change', listener);
+  return () => query.removeEventListener('change', listener);
+}
+
+const COARSE_POINTER = '(pointer: coarse)';
