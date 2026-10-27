@@ -7,11 +7,20 @@ export const isNative = Capacitor.isNativePlatform();
 /** 'web', 'android', and later 'ios' or 'electron'. */
 export const platform = Capacitor.getPlatform();
 
-/** Per-platform integration for the native shells. */
-export function initNativeShell(): void {
+/**
+ * Per-platform integration for the native shells.
+ *
+ * @param onBack handles the Android back button first (e.g. leaving a game
+ *               or prompt); returns false to send the app to the background.
+ */
+export function initNativeShell(onBack: () => boolean = () => false): void {
   if (platform === 'android') {
-    // The back button sends the app to the background, keeping the session.
-    App.addListener('backButton', () => App.minimizeApp());
+    // Otherwise the back button sends the app to the background, keeping the session.
+    App.addListener('backButton', () => {
+      if (!onBack()) {
+        App.minimizeApp();
+      }
+    });
   }
 }
 

@@ -1,3 +1,5 @@
+• Starts in your phone's language when a language pack exists for it
+• Back leaves games and prompts before closing the app
 • Options with a value work on sub-commands, e.g. dice roll --sides 6
 • Passwords are generated with the secure random generator
 • String commands report a missing --find instead of matching everything

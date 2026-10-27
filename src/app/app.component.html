@@ -5,5 +5,8 @@
   }
 </main>
 @if (updateReady()) {
-  <button type="button" class="update" (click)="reload()">A new version is ready. Tap to reload.</button>
+  <div class="update" role="status">
+    <button type="button" class="update-reload" (click)="reload()">A new version is ready. Tap to reload.</button>
+    <button type="button" class="update-dismiss" aria-label="Dismiss" (click)="updateReady.set(false)">✕</button>
+  </div>
 }
