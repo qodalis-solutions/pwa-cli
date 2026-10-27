@@ -72,6 +72,7 @@
     "@qodalis/cli-tetris": "^2.0.0-rc.3",
     "@qodalis/cli-text-to-image": "^2.0.0-rc.3",
     "@qodalis/cli-todo": "^2.0.0-rc.3",
+    "@qodalis/cli-users": "^2.0.0-rc.3",
     "@qodalis/cli-wget": "^2.0.0-rc.3",
     "@qodalis/cli-wordle": "^2.0.0-rc.3",
     "@qodalis/cli-yesno": "^2.0.0-rc.3",

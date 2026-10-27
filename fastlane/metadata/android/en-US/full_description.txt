@@ -1,4 +1,4 @@
-Qodalis CLI puts a real command line on your phone. It runs entirely on your device, works offline, needs no account and collects no data.
+Qodalis CLI puts a real command line on your phone. It runs entirely on your device, works offline, needs no online account and collects no data.
 
 DEVELOPER TOOLS
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary and morse
@@ -28,6 +28,6 @@ BUILT FOR TOUCH SCREENS
 • Themes, adjustable font size and 11 languages
 
 PRIVATE BY DESIGN
-No ads, no analytics, no sign-up. Everything you create stays on your device. The app only uses the network when you run a command that needs it, such as curl or speed-test.
+No ads, no analytics, no online sign-up. Your user account and everything you create stay on your device. The app only uses the network when you run a command that needs it, such as curl or speed-test.
 
 Qodalis CLI is open source and built on the Qodalis web terminal framework: https://cli.qodalis.com
