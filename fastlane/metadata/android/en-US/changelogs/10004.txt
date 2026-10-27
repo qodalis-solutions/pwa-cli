@@ -1,0 +1,5 @@
+• Options with a value work on sub-commands, e.g. dice roll --sides 6
+• Passwords are generated with the secure random generator
+• String commands report a missing --find instead of matching everything
+• rot --shift=0 leaves the text unchanged
+• Built on Qodalis CLI 2.0.0-rc.3
