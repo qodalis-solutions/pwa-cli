@@ -1,6 +1,6 @@
 import type { CliEngine } from '@qodalis/cli';
 
-import { ExtraKey } from './extra-keys';
+import { ExtraKey, KeyPress } from './extra-keys';
 
 type Terminal = ReturnType<CliEngine['getTerminal']>;
 
@@ -14,9 +14,15 @@ export function sendKey(terminal: Terminal, key: ExtraKey): void {
     terminal.input(key.text, true);
     return;
   }
-  const press = key.press;
+  if (key.press) {
+    sendPress(terminal, key.press);
+  }
+}
+
+/** Dispatches a keydown on the terminal's input, as a hardware keyboard would. */
+export function sendPress(terminal: Terminal, press: KeyPress): void {
   const target = terminal.textarea;
-  if (!press || !target) {
+  if (!target) {
     return;
   }
   const event = new KeyboardEvent('keydown', {
