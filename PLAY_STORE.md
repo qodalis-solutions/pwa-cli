@@ -169,12 +169,11 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
    `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (1.0.3 → `10003.txt`, at most 500
    characters). Merge it into `develop`: testers get the build.
 2. Test it on a phone. Further merges into `develop` upload new builds of the same version.
-3. Open a pull request from `develop` into `main` and merge it: CI promotes the tested build to
-   production.
-
-   Squash merges give `develop` and `main` different histories, so this pull request can report
-   conflicts that are not real. Then branch from `main`, take `develop`'s files
-   (`git checkout origin/develop -- .`), commit, and open the pull request from that branch.
+3. Fast-forward `main` to `develop` (no release pull request), once `develop`'s CI has passed:
+   `git fetch origin && git push origin origin/develop:refs/heads/main`. CI promotes the tested
+   build to production. `main` and `develop` keep one linear history: the **main history** ruleset
+   blocks force pushes and anything but a fast-forward, for everyone; **main changes** (pull request
+   and checks) lets admins push the release directly.
 
 ## Play API notes
 
