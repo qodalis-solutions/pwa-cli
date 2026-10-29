@@ -55,7 +55,10 @@ keyPassword=...
      Answer *No* to violence, sexuality, language, controlled substances and gambling. The app can
      reach the internet through `curl`/`wget` but has no user-to-user interaction or content
      sharing. Expected rating: Everyone / PEGI 3.
-   - **Target audience**: 18 and over (a developer tool; avoids the Families policy).
+   - **Target audience**: ages 13–15, 16–17 and 18 and over (students and developers). No group
+     under 13, so the Families policy does not apply; turn off the "Committed to follow the Play
+     Families policy" answer in Data safety. Adding an under-13 group would bring it back, with
+     limits on SDKs such as Firebase Analytics.
    - **News app**: no. **COVID-19 tracing**: no. **Government app**: no.
    - **Financial features**: none. **Health**: none.
    - **Data safety**:
