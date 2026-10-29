@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "914258441535",
+    "project_id": "qodalis-cli",
+    "storage_bucket": "qodalis-cli.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914258441535:android:9170ced0a8b40f78da8f8a",
+        "android_client_info": {
+          "package_name": "com.qodalis.cli"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD69kJyxVX3h0Tkl0NEkcA5ZoDAqz0wheE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

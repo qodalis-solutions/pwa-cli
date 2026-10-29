@@ -71,6 +71,15 @@ test('privacy command links to the published policy', async ({ page }) => {
   await openTerminal(page);
   await run(page, 'privacy');
   const text = await terminalText(page);
-  expect(text).toContain('The app collects no data');
+  expect(text).toContain('sends usage statistics');
   expect(text).toContain('https://cli.qodalis.com/privacy/');
+});
+
+test('analytics command: the web app sends none', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', (r) => requests.push(r.url()));
+  await openTerminal(page);
+  await run(page, 'analytics');
+  expect(await terminalText(page)).toContain('The web app sends no analytics');
+  expect(requests.filter((url) => /google-analytics|firebase|googletagmanager/.test(url))).toEqual([]);
 });
