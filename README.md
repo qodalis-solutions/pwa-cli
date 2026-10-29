@@ -5,7 +5,7 @@
 # Qodalis CLI for phones
 
 The Qodalis CLI terminal as an installable PWA and an Android app: commands, a file system, an editor and games
-that run offline, with no account and no data collection.
+that run offline, with no online account and only anonymous usage statistics (Android, `analytics off` stops them).
 
 [![CI](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/ci.yml)
 [![Release](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/release.yml/badge.svg)](https://github.com/qodalis-solutions/pwa-cli/actions/workflows/release.yml)

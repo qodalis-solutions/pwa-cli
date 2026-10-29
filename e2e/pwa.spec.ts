@@ -44,6 +44,6 @@ test.describe('installable PWA', () => {
   test('serves the privacy policy', async ({ page }) => {
     await page.goto('/privacy.html');
     await expect(page.getByRole('heading', { name: 'Privacy Policy' })).toBeVisible();
-    await expect(page.getByText('The app has no accounts on our servers')).toBeVisible();
+    await expect(page.getByText('run analytics off in the app', { exact: false })).toBeVisible();
   });
 });

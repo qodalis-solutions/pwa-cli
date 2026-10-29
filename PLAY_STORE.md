@@ -9,7 +9,8 @@ Play Console account owner can do.
 | Package name | `com.qodalis.cli` (permanent once published) |
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
-| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). No data is collected, so the Data safety answers are unchanged |
+| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). Firebase Analytics (since 1.0.5) adds the install-time `WAKE_LOCK` and Play install-referrer permissions; its ad permissions (`AD_ID`, `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`) are removed in the manifest |
+| Analytics | Firebase project `qodalis-cli`; its config `android/app/google-services.json` is committed (it holds identifiers, not secrets: restrict the API key to `com.qodalis.cli` in Google Cloud). Events: Firebase's automatic ones plus `command_run` (`command`, `success`), see `src/app/analytics.ts`; users opt out with `analytics off` |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
@@ -58,11 +59,17 @@ keyPassword=...
    - **News app**: no. **COVID-19 tracing**: no. **Government app**: no.
    - **Financial features**: none. **Health**: none.
    - **Data safety**:
-     - Does your app collect or share any of the required user data types? **No.**
+     - Does your app collect or share any of the required user data types? **Yes** since 1.0.5
+       (Firebase Analytics, `src/app/analytics.ts`). Declare:
+       - **App activity → App interactions** (app opens, commands run) and **Device or other
+         IDs** (the Firebase app instance ID). For both: collected, not shared, not processed
+         ephemerally, optional (users can turn it off with `analytics off`), purpose **Analytics**.
+       - Not collected: location (only country, from the IP), personal info, advertising ID.
      - Data is stored on the device only (the user account, to-do items, files, history, settings)
        and never sent to the developer, which Play does not count as collection.
-     - Is all user data encrypted in transit? Not applicable (no data collected); answer per the
-       form if asked.
+     - Is all user data encrypted in transit? **Yes** (Firebase uses HTTPS).
+     - **Advertising ID** declaration (App content → Advertising ID): **No**, the app does not use
+       it (`AD_ID` is removed in `AndroidManifest.xml`).
      - Account deletion (since 1.0.4 the first launch creates a local user account): the account
        lives only on the device; deletion is `userdel`, clearing storage or uninstalling. If the
        form asks for a deletion URL, use https://cli.qodalis.com/privacy/#delete-account.

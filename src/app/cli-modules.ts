@@ -36,6 +36,7 @@ import { wgetModule } from '@qodalis/cli-wget';
 import { wordleModule } from '@qodalis/cli-wordle';
 import { yesnoModule } from '@qodalis/cli-yesno';
 
+import { analyticsModule } from './analytics';
 import { deviceModule } from './device-commands';
 import { appModule } from './privacy-command';
 
@@ -46,8 +47,9 @@ import { appModule } from './privacy-command';
  * email and password before the terminal can be used.
  */
 export const CLI_MODULES: ICliModule[] = [
-  // App commands (privacy policy)
+  // App commands (privacy policy, analytics opt-out)
   appModule,
+  analyticsModule,
   // Local user accounts: first launch asks for the owner's account, who
   // stays signed in on their phone until they sign out
   usersModule.configure({ maxSessionLifetime: 0 }),

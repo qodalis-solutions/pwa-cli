@@ -1,0 +1,2 @@
+• Anonymous usage statistics (app use and command names, never their arguments or output); turn them off with: analytics off
+• Privacy policy updated
