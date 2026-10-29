@@ -40,6 +40,10 @@
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
             android:value="false" />
+        <!-- Nothing is used for ads (the Play Families policy forbids it). -->
+        <meta-data
+            android:name="google_analytics_default_allow_ad_personalization_signals"
+            android:value="false" />
     </application>
 
     <!-- Permissions -->
