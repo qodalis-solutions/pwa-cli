@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Runs android/gradlew on a JDK that Gradle 8.14 can run on (17 or 21). On
+# Runs android/gradlew on a JDK that Gradle 9 can run on (17 or 21). On
 # macOS it picks an installed JDK 21/17 when JAVA_HOME is unset or newer.
 set -euo pipefail
 cd "$(dirname "$0")/../android"
