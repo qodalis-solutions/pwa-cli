@@ -38,20 +38,20 @@ android {
     signingConfigs {
         release {
             if (releaseStoreFile) {
-                storeFile rootProject.file(releaseStoreFile)
-                storePassword signingValue('storePassword', 'ANDROID_KEYSTORE_PASSWORD')
-                keyAlias signingValue('keyAlias', 'ANDROID_KEY_ALIAS')
-                keyPassword signingValue('keyPassword', 'ANDROID_KEY_PASSWORD')
+                storeFile = rootProject.file(releaseStoreFile)
+                storePassword = signingValue('storePassword', 'ANDROID_KEYSTORE_PASSWORD')
+                keyAlias = signingValue('keyAlias', 'ANDROID_KEY_ALIAS')
+                keyPassword = signingValue('keyPassword', 'ANDROID_KEY_PASSWORD')
             }
         }
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (releaseStoreFile) {
-                signingConfig signingConfigs.release
+                signingConfig = signingConfigs.release
             }
         }
     }
