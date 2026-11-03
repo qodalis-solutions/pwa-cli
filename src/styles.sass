@@ -12,6 +12,19 @@
   --inset-left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px))
   color-scheme: dark
 
+// The Android app: the WebView already ends above the keyboard (Capacitor
+// pads the window by the keyboard's height), so the shell fills it (no visualViewport sizing, which some
+// phones, Xiaomi among them, leave stale after the keyboard closes). The bottom
+// inset is Capacitor's alone: older WebViews keep reporting the navigation bar
+// in env() while the keyboard is open, a gap above the keyboard.
+\:root.android
+  --inset-bottom: var(--safe-area-inset-bottom, 0px)
+
+  .shell
+    top: 0
+    bottom: 0
+    height: auto
+
 html,
 body
   margin: 0
