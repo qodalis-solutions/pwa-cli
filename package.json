@@ -1,6 +1,6 @@
 {
   "name": "pwa-cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Qodalis CLI for phones: an offline web terminal, installable as a PWA and packaged for Google Play",
   "private": true,
   "scripts": {
