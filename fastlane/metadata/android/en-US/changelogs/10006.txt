@@ -1,0 +1,3 @@
+• Scroll back through the output with your finger, with smooth momentum; scrolling no longer opens the keyboard
+• The extra keys sit right above the navigation bar and the keyboard on Android 14 and older (no more gap)
+• Build updates for lower memory use (Android Gradle plugin 9, R8 resource shrinking)
