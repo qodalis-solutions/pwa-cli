@@ -21,7 +21,8 @@ import { ExtraKeysComponent } from './extra-keys/extra-keys.component';
 import { sendKey, sendPress } from './extra-keys/send-key';
 import { StickyModifier } from './extra-keys/sticky-modifier';
 import { CommandControls, commandPad, CommandPad, swipeKey } from './command-keys/command-keys';
-import { hideSplash, initNativeShell } from './native/native-shell';
+import { hideSplash, initNativeShell, platform } from './native/native-shell';
+import { enableTouchScroll } from './touch-scroll';
 import { hasTouchKeyboard, trackVisualViewport, watchTouchKeyboard } from './viewport';
 
 const ESCAPE = EXTRA_KEYS.find((k) => k.name === 'Escape')!;
@@ -62,7 +63,12 @@ export class AppComponent {
 
   constructor() {
     const destroyRef = this.destroyRef;
-    destroyRef.onDestroy(trackVisualViewport());
+    if (platform === 'android') {
+      // The WebView itself shrinks above the keyboard (adjustResize); see styles.sass.
+      document.documentElement.classList.add('android');
+    } else {
+      destroyRef.onDestroy(trackVisualViewport());
+    }
     destroyRef.onDestroy(watchTouchKeyboard((touch) => this.showKeys.set(touch)));
     initNativeShell(() => this.onBack());
     // The terminal draws within a frame or two of the first render; engineReady
@@ -97,6 +103,7 @@ export class AppComponent {
     applyDeviceLanguage(engine);
     const terminal = engine.getTerminal();
     this.destroyRef.onDestroy(this.applyCtrlToKeyboard(terminal));
+    this.destroyRef.onDestroy(enableTouchScroll(terminal, () => this.playing()));
     // Full-screen commands run as the context processor; their keys replace the extra keys.
     terminal.onRender(() => this.syncCommandPad(engine));
     this.syncBackground(terminal.options.theme?.background);
