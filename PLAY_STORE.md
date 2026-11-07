@@ -9,7 +9,8 @@ Play Console account owner can do.
 | Package name | `com.qodalis.cli` (permanent once published) |
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
-| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). Firebase Analytics (since 1.0.5) adds the install-time `WAKE_LOCK` and Play install-referrer permissions; its ad permissions (`AD_ID`, `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`) are removed in the manifest |
+| Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). Firebase Analytics (since 1.0.5) adds the install-time `WAKE_LOCK` and Play install-referrer permissions. Since 1.0.7 the AdMob SDK adds `AD_ID`, `ACCESS_ADSERVICES_AD_ID` and `ACCESS_ADSERVICES_ATTRIBUTION` (install-time); before, the manifest removed them |
+| Ads | Since 1.0.7, Android only: one adaptive AdMob banner at the top (`src/app/ads.ts`), after Google's consent message (UMP; no ads without a consent decision), hidden while a game or nano runs; `privacy choices` reopens the consent form. AdMob app `ca-app-pub-5597997223302010~2904284252`, banner unit `ca-app-pub-5597997223302010/5044408612`, used only by the Play bundle (`play` build configuration, `ad-units.play.ts`); every other build shows Google's test banner. The consent message, frequency settings and app-ads.txt (cli.qodalis.com and qodalis.com) live in the AdMob account |
 | Analytics | Firebase project `qodalis-cli`; its config `android/app/google-services.json` is committed (it holds identifiers, not secrets: restrict the API key to `com.qodalis.cli` in Google Cloud). Events: Firebase's automatic ones plus `command_run` (`command`, `success`), see `src/app/analytics.ts`; users opt out with `analytics off` |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
@@ -50,7 +51,7 @@ keyPassword=...
      command, as Play requires.
    - **App access** ("Is any part of your app restricted?"): **No**, all functionality is available
      without special access.
-   - **Ads**: the app does not contain ads.
+   - **Ads**: **Yes**, the app contains ads (since 1.0.7: the AdMob banner).
    - **Content rating**: questionnaire category *Utility, Productivity, Communication, or Other*.
      Answer *No* to violence, sexuality, language, controlled substances and gambling. The app can
      reach the internet through `curl`/`wget` but has no user-to-user interaction or content
@@ -63,16 +64,25 @@ keyPassword=...
    - **Financial features**: none. **Health**: none.
    - **Data safety**:
      - Does your app collect or share any of the required user data types? **Yes** since 1.0.5
-       (Firebase Analytics, `src/app/analytics.ts`). Declare:
-       - **App activity → App interactions** (app opens, commands run) and **Device or other
-         IDs** (the Firebase app instance ID). For both: collected, not shared, not processed
-         ephemerally, optional (users can turn it off with `analytics off`), purpose **Analytics**.
-       - Not collected: location (only country, from the IP), personal info, advertising ID.
+       (Firebase Analytics, `src/app/analytics.ts`) and, since 1.0.7, the AdMob SDK. Declare:
+
+       | Data type | Collected | Shared | Purposes |
+       |---|---|---|---|
+       | Location → Approximate location | yes (AdMob, from the IP) | yes (ads) | advertising, fraud prevention |
+       | Device or other IDs (Firebase app instance ID; advertising ID) | yes | yes (ads) | analytics, advertising, fraud prevention |
+       | App activity → App interactions (app opens, commands run; ad interactions) | yes | yes (ads) | analytics, advertising, fraud prevention |
+       | App info and performance → Crash logs, Diagnostics | yes (AdMob) | yes (ads) | advertising, fraud prevention, analytics |
+
+       Not processed ephemerally. Analytics is optional (`analytics off`); the ads data is required
+       for ads but asked for with Google's consent message in the EEA, UK and Switzerland. Not
+       collected: precise location, personal info, messages, files.
      - Data is stored on the device only (the user account, to-do items, files, history, settings)
        and never sent to the developer, which Play does not count as collection.
-     - Is all user data encrypted in transit? **Yes** (Firebase uses HTTPS).
-     - **Advertising ID** declaration (App content → Advertising ID): **No**, the app does not use
-       it (`AD_ID` is removed in `AndroidManifest.xml`).
+     - Is all user data encrypted in transit? **Yes** (Firebase and AdMob use HTTPS).
+     - **Advertising ID** declaration (App content → Advertising ID): **Yes** since 1.0.7, for
+       **Advertising or marketing** (and Analytics/Fraud prevention, as AdMob uses it). Change it
+       before a build with `AD_ID` is uploaded: Play rejects the upload while the declaration says
+       No.
      - Account deletion (since 1.0.4 the first launch creates a local user account): the account
        lives only on the device; deletion is `userdel`, clearing storage or uninstalling. If the
        form asks for a deletion URL, use https://cli.qodalis.com/privacy/#delete-account.
