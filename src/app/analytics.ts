@@ -16,8 +16,9 @@ import { platform } from './native/native-shell';
  * android/app/google-services.json). Firebase records installs, sessions,
  * app version, device model, OS and country by itself; the app adds one
  * event per command run with the command's name, never its arguments or
- * output. The advertising ID is not collected (AndroidManifest.xml). The PWA
- * sends nothing.
+ * output. Analytics does not collect the advertising ID
+ * (google_analytics_adid_collection_enabled in AndroidManifest.xml); only the
+ * AdMob banner uses it (ads.ts). The PWA sends nothing.
  */
 export const analyticsAvailable = platform === 'android';
 

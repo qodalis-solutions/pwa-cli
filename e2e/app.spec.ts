@@ -72,6 +72,7 @@ test('privacy command links to the published policy', async ({ page }) => {
   await run(page, 'privacy');
   const text = await terminalText(page);
   expect(text).toContain('sends usage statistics');
+  expect(text).toContain('The web app has no ads');
   expect(text).toContain('https://cli.qodalis.com/privacy/');
 });
 
