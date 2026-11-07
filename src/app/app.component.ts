@@ -21,6 +21,7 @@ import { ExtraKeysComponent } from './extra-keys/extra-keys.component';
 import { sendKey, sendPress } from './extra-keys/send-key';
 import { StickyModifier } from './extra-keys/sticky-modifier';
 import { CommandControls, commandPad, CommandPad, swipeKey } from './command-keys/command-keys';
+import { ads } from './native/ads-android';
 import { hideSplash, initNativeShell, platform } from './native/native-shell';
 import { enableTouchScroll } from './touch-scroll';
 import { hasTouchKeyboard, trackVisualViewport, watchTouchKeyboard } from './viewport';
@@ -111,6 +112,10 @@ export class AppComponent {
     terminal.onRender(() => this.syncBackground(terminal.options.theme?.background));
     // Boot and the welcome message are done; end-to-end tests wait for this.
     (window as unknown as { qodalisCli?: CliEngine }).qodalisCli = engine;
+    // The consent message and the banner come once the terminal is on screen (Android only).
+    if (platform === 'android') {
+      ads.init();
+    }
   }
 
   onExtraKey(key: ExtraKey): void {
@@ -181,6 +186,8 @@ export class AppComponent {
       this.command = controls ? commandPad(controls) : undefined;
       const board = !!controls && !controls.textInput;
       this.playing.set(board);
+      // Games and nano get the whole screen: the banner comes back when they exit.
+      ads.setWanted(!controls);
       const textarea = engine.getTerminal().textarea;
       if (board) {
         textarea?.setAttribute('inputmode', 'none');

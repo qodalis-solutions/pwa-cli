@@ -36,11 +36,15 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
+        <!-- AdMob, the banner in src/app/ads.ts. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5597997223302010~2904284252" />
         <!-- Firebase Analytics without the advertising ID (see src/app/analytics.ts). -->
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
             android:value="false" />
-        <!-- Nothing is used for ads (the Play Families policy forbids it). -->
+        <!-- Usage analytics is never used for ad personalization. -->
         <meta-data
             android:name="google_analytics_default_allow_ad_personalization_signals"
             android:value="false" />
@@ -49,8 +53,5 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Added by Firebase Analytics; the app uses no advertising ID or ad attribution. -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove" />
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" tools:node="remove" />
+    <!-- AD_ID and the ad services permissions come from the AdMob SDK (Google Mobile Ads). -->
 </manifest>

@@ -9,7 +9,8 @@
   display: flex
   flex-direction: column
   box-sizing: border-box
-  padding: var(--inset-top) var(--inset-right) var(--inset-bottom) var(--inset-left)
+  // The Android app's banner sits below the status bar, above the terminal (ads.ts).
+  padding: calc(var(--inset-top) + var(--ad-banner-height, 0px)) var(--inset-right) var(--inset-bottom) var(--inset-left)
   background: var(--app-bg)
 
 .terminal
