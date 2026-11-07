@@ -1,0 +1,4 @@
+• Qodalis CLI 2.4.0: the welcome text wraps cleanly on narrow screens, and theme and font-size settings stay as you set them
+• A small ad banner at the top of the screen, never over the keyboard or the keys; it hides while you play a game or use nano
+• In the EU, UK and Switzerland you choose first whether ads may use your data; change it anytime with: privacy choices
+• Privacy policy updated
