@@ -56,7 +56,7 @@ platform :android do
   desc "Build the signed bundle and upload it to internal testing"
   lane :internal do |options|
     version_code = next_version_code
-    sh("cd #{ROOT} && npm run cap:sync && scripts/gradlew.sh bundleRelease -PversionCode=#{version_code}")
+    sh("cd #{ROOT} && npm run cap:sync:play && scripts/gradlew.sh bundleRelease -PversionCode=#{version_code}")
     # Play reads release notes from changelogs/<versionCode>.txt.
     notes = File.join(CHANGELOGS, "#{derived_version_code}.txt")
     copy = File.join(CHANGELOGS, "#{version_code}.txt")

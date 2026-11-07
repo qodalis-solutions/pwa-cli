@@ -68,6 +68,14 @@
               ],
               "outputHashing": "all"
             },
+            "play": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/ad-units.ts",
+                  "with": "src/app/ad-units.play.ts"
+                }
+              ]
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
