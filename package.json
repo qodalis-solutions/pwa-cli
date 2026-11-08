@@ -17,6 +17,7 @@
     "android:open": "cap open android",
     "android:apk": "npm run cap:sync && scripts/gradlew.sh assembleDebug",
     "cap:sync:play": "ng build --configuration production,play && cap sync android",
+    "cap:sync:play-internal": "ng build --configuration production,play-internal && cap sync android",
     "android:bundle": "npm run cap:sync:play && scripts/gradlew.sh bundleRelease",
     "play:status": "fastlane status",
     "play:internal": "fastlane internal",
