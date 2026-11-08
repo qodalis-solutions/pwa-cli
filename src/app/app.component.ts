@@ -14,6 +14,7 @@ import { CliEngine } from '@qodalis/cli';
 import { CliLogLevel, CliOptions } from '@qodalis/cli-core';
 import { filter } from 'rxjs';
 
+import { BUILD_CHANNEL } from './build-channel';
 import { CLI_MODULES } from './cli-modules';
 import { applyDeviceLanguage } from './device-language';
 import { ctrlLetter, EXTRA_KEYS, ExtraKey } from './extra-keys/extra-keys';
@@ -45,6 +46,8 @@ export class AppComponent {
     },
   };
   readonly modules = CLI_MODULES;
+  /** Tagged in a corner on builds other than the store's (Play internal testing), so testers know which they run. */
+  readonly channel = BUILD_CHANNEL;
   readonly showKeys = signal(hasTouchKeyboard());
   readonly updateReady = signal(false);
   /** The sticky CTRL key of the extra-keys rows. */

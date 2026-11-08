@@ -12,6 +12,9 @@
     <app-extra-keys [ctrl]="ctrl.state()" (key)="onExtraKey($event)" />
   }
 </main>
+@if (channel) {
+  <span class="channel" aria-hidden="true">{{ channel }}</span>
+}
 @if (updateReady()) {
   <div class="update" role="status">
     <button type="button" class="update-reload" (click)="reload()">A new version is ready. Tap to reload.</button>

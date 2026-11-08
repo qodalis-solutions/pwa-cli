@@ -19,6 +19,22 @@
   min-height: 0
   padding: 4px 0 0 4px
 
+// The build channel (internal), out of the way of the prompt and the extra keys.
+.channel
+  position: fixed
+  top: calc(var(--app-top, 0px) + var(--inset-top) + var(--ad-banner-height, 0px) + 4px)
+  right: calc(var(--inset-right) + 6px)
+  padding: 1px 6px
+  border-radius: 4px
+  font: 600 10px/1.4 system-ui, sans-serif
+  letter-spacing: 0.04em
+  text-transform: uppercase
+  color: #1b1f24
+  background: #f5c542
+  opacity: 0.85
+  pointer-events: none
+  z-index: 10
+
 .update
   position: fixed
   left: 50%
