@@ -13,6 +13,8 @@ import {
   ICliModule,
 } from '@qodalis/cli-core';
 
+import { BUILD_CHANNEL } from './build-channel';
+
 /**
  * Commands for the phone the app runs on. They use Capacitor plugins on
  * Android and the matching web APIs in the PWA, and need no permissions
@@ -30,6 +32,11 @@ function inputText(command: CliProcessCommand): string {
 
 function errorMessage(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
+}
+
+/** The app version as users see it: `1.0.8 (10023)`, tagged `· internal` on tester builds. */
+export function versionLabel(version: string, build: string): string {
+  return `${version} (${build})${BUILD_CHANNEL ? ` · ${BUILD_CHANNEL}` : ''}`;
 }
 
 /** `device`: model, system and app version. */
@@ -52,7 +59,7 @@ export class DeviceCommandProcessor implements ICliCommandProcessor {
     }
     if (Capacitor.isNativePlatform()) {
       const app = await App.getInfo();
-      entries.push(['App', `${app.name} ${app.version} (${app.build})`]);
+      entries.push(['App', `${app.name} ${versionLabel(app.version, app.build)}`]);
     }
     entries.push(['Language', (await Device.getLanguageTag()).value]);
     context.writer.writeKeyValue(entries.filter(([, v]) => !!v));

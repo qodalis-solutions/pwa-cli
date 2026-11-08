@@ -76,6 +76,14 @@
                 }
               ]
             },
+            "play-internal": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/build-channel.ts",
+                  "with": "src/app/build-channel.internal.ts"
+                }
+              ]
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
