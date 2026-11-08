@@ -38,6 +38,7 @@ import { yesnoModule } from '@qodalis/cli-yesno';
 
 import { analyticsModule } from './analytics';
 import { deviceModule } from './device-commands';
+import { adsModule } from './native/ads-android';
 import { appModule } from './privacy-command';
 
 /**
@@ -47,9 +48,10 @@ import { appModule } from './privacy-command';
  * email and password before the terminal can be used.
  */
 export const CLI_MODULES: ICliModule[] = [
-  // App commands (privacy policy, analytics opt-out)
+  // App commands (privacy policy, analytics opt-out) and the ads' command count
   appModule,
   analyticsModule,
+  adsModule,
   // Local user accounts: first launch asks for the owner's account, who
   // stays signed in on their phone until they sign out
   usersModule.configure({ maxSessionLifetime: 0 }),

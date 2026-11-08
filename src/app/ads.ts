@@ -3,7 +3,8 @@ import type { AdMobPlugin } from '@capacitor-community/admob';
 /**
  * Ads, Android app only: one adaptive AdMob banner at the top of the screen,
  * below the status bar (the bottom has the extra keys and the keyboard, where
- * a banner invites accidental taps). Google's consent message (UMP) comes
+ * a banner invites accidental taps), and now and then a full-screen ad between
+ * commands (see commandRun). Google's consent message (UMP) comes
  * first; without a consent decision no ad is requested. The banner hides
  * while a full-screen command (a game, nano) runs. The web app loads none of
  * this: the plugin is imported only on Android.
@@ -20,11 +21,20 @@ export type AdMobApi = Pick<
   | 'hideBanner'
   | 'resumeBanner'
   | 'removeBanner'
+  | 'prepareInterstitial'
+  | 'showInterstitial'
   | 'addListener'
 >;
 
 /** The banner's height in CSS pixels; the shell leaves that much room above the terminal. */
 export const BANNER_HEIGHT_VAR = '--ad-banner-height';
+
+/** A full-screen ad comes after this many commands... */
+export const INTERSTITIAL_EVERY = 15;
+/** ...at least this long after the previous one... */
+export const INTERSTITIAL_GAP_MS = 5 * 60_000;
+/** ...and never in the first minutes after the app opens. */
+export const INTERSTITIAL_FIRST_MS = 3 * 60_000;
 
 /** The plugin's event names and options, as strings so this file loads without the plugin. */
 const SIZE_CHANGED = 'bannerAdSizeChanged';
@@ -34,6 +44,7 @@ export interface AdUnits {
   /** Whether these are the real units (the Play bundle) or Google's test units. */
   live: boolean;
   banner: string;
+  interstitial: string;
 }
 
 export class Ads {
@@ -50,12 +61,24 @@ export class Ads {
   private visible = false;
   /** Banner calls run one after another, so a quick hide and show cannot cross. */
   private queue: Promise<void> = Promise.resolve();
+  /** Commands run since the last full-screen ad. */
+  private commands = 0;
+  /** When the last full-screen ad showed, or the app opened. */
+  private lastFullScreen: number;
+  private interstitial: 'none' | 'loading' | 'ready' = 'none';
 
   constructor(
-    private readonly load: () => Promise<AdMobApi | undefined>,
+    /**
+     * Loads the plugin module. The module, not the plugin: Capacitor plugins answer every property,
+     * `then` included, so a promise resolved with the plugin itself never settles.
+     */
+    private readonly load: () => Promise<{ AdMob: AdMobApi } | undefined>,
     private readonly root: { style: { setProperty(name: string, value: string): void } },
     private readonly units: AdUnits,
-  ) {}
+    private readonly now: () => number = Date.now,
+  ) {
+    this.lastFullScreen = now() - INTERSTITIAL_GAP_MS + INTERSTITIAL_FIRST_MS;
+  }
 
   /** Whether the user must be offered a way to change their consent (EEA, UK, Switzerland). */
   get privacyOptionsRequired(): boolean {
@@ -72,6 +95,38 @@ export class Ads {
   setWanted(wanted: boolean): Promise<void> {
     this.wanted = wanted;
     return this.sync();
+  }
+
+  /**
+   * Counts a command the user ran. Every INTERSTITIAL_EVERY commands, once the
+   * last full-screen ad is INTERSTITIAL_GAP_MS old, a preloaded one shows: the
+   * command has finished, so it never interrupts work, and never while a
+   * full-screen command (game, nano) is open. Without a loaded ad or consent
+   * the count waits for the next command.
+   */
+  commandRun(): Promise<void> {
+    this.commands++;
+    if (
+      this.commands < INTERSTITIAL_EVERY ||
+      this.now() - this.lastFullScreen < INTERSTITIAL_GAP_MS ||
+      !this.wanted ||
+      !this.canRequestAds ||
+      !this.started
+    ) {
+      return Promise.resolve();
+    }
+    if (this.interstitial !== 'ready') {
+      this.prepareInterstitial();
+      return Promise.resolve();
+    }
+    this.commands = 0;
+    this.lastFullScreen = this.now();
+    this.interstitial = 'none';
+    this.queue = this.queue
+      .then(() => this.admob!.showInterstitial())
+      .catch((e) => console.error(e))
+      .then(() => this.prepareInterstitial());
+    return this.queue;
   }
 
   /** Reopens Google's consent form; resolves to false when the user's region needs none. */
@@ -91,7 +146,7 @@ export class Ads {
 
   private async initialize(): Promise<void> {
     try {
-      this.admob = await this.load();
+      this.admob = (await this.load())?.AdMob;
     } catch (e) {
       console.error('AdMob is not available', e);
     }
@@ -131,6 +186,22 @@ export class Ads {
     await this.admob!.addListener(SIZE_CHANGED as never, ((size: { height: number }) =>
       this.setHeight(size.height)) as never);
     await this.admob!.initialize({ initializeForTesting: !this.units.live });
+    this.prepareInterstitial();
+  }
+
+  /** Loads the next full-screen ad in the background, so it is ready when its turn comes. */
+  private prepareInterstitial(): void {
+    if (!this.admob || !this.canRequestAds || this.interstitial !== 'none') {
+      return;
+    }
+    this.interstitial = 'loading';
+    this.admob
+      .prepareInterstitial({ adId: this.units.interstitial, isTesting: !this.units.live })
+      .then(() => (this.interstitial = 'ready'))
+      .catch((e) => {
+        console.error('Full-screen ad failed to load', e);
+        this.interstitial = 'none';
+      });
   }
 
   private sync(): Promise<void> {
