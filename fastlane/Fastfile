@@ -1,10 +1,10 @@
 # Google Play from the command line. Run from the repository root:
 #   fastlane status                                   versions on every track
-#   fastlane internal                                 build and upload to internal testing (draft)
+#   fastlane internal                                 build with test ads, upload to internal testing (draft)
 #   fastlane internal status:completed                ...and roll it out to testers (CI on develop)
 #   fastlane rollout                                  roll out the internal draft
-#   fastlane production                               promote the tested build of this version (CI on main)
-#   fastlane promote to:production rollout:0.1        promote internal -> production at 10%
+#   fastlane production                               rebuild this version with real ads for production (CI on main)
+#   fastlane promote to:alpha                         promote internal -> closed testing (internal builds have test ads)
 #   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
 #   fastlane listing                                  push store text and images
 #   fastlane listing validate:true                    dry run: Google validates, nothing changes
@@ -42,6 +42,35 @@ def next_version_code
   [used.max.to_i + 1, derived_version_code].max
 end
 
+# Builds the signed bundle with the given npm sync script (it picks the ads and the
+# version tag) and returns its versionCode.
+def build_bundle(sync_script)
+  version_code = next_version_code
+  sh("cd #{ROOT} && npm run #{sync_script} && scripts/gradlew.sh bundleRelease -PversionCode=#{version_code}")
+  version_code
+end
+
+# Uploads the bundle with release notes: Play reads them from changelogs/<versionCode>.txt, written per version.
+def upload_bundle(track, version_code, release_status:, rollout: nil)
+  notes = File.join(CHANGELOGS, "#{derived_version_code}.txt")
+  copy = File.join(CHANGELOGS, "#{version_code}.txt")
+  temporary = copy != notes && File.exist?(notes) && !File.exist?(copy)
+  FileUtils.cp(notes, copy) if temporary
+  begin
+    upload_to_play_store(
+      track: track,
+      aab: AAB,
+      release_status: release_status,
+      rollout: rollout,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  ensure
+    FileUtils.rm_f(copy) if temporary
+  end
+end
+
 platform :android do
   desc "Version codes and release names on every track"
   lane :status do
@@ -53,48 +82,35 @@ platform :android do
     UI.message("next upload: #{package_version} (#{next_version_code})")
   end
 
-  desc "Build the signed bundle and upload it to internal testing"
+  desc "Build the signed bundle with test ads and upload it to internal testing"
   lane :internal do |options|
-    version_code = next_version_code
-    sh("cd #{ROOT} && npm run cap:sync:play && scripts/gradlew.sh bundleRelease -PversionCode=#{version_code}")
-    # Play reads release notes from changelogs/<versionCode>.txt.
-    notes = File.join(CHANGELOGS, "#{derived_version_code}.txt")
-    copy = File.join(CHANGELOGS, "#{version_code}.txt")
-    temporary = copy != notes && File.exist?(notes) && !File.exist?(copy)
-    FileUtils.cp(notes, copy) if temporary
-    begin
-      upload_to_play_store(
-        track: "internal",
-        aab: AAB,
-        release_status: options.fetch(:status, "draft"),
-        skip_upload_metadata: true,
-        skip_upload_images: true,
-        skip_upload_screenshots: true,
-      )
-    ensure
-      FileUtils.rm_f(copy) if temporary
-    end
+    # Testers get Google's sample banner (taps on the real unit risk invalid-traffic
+    # flags) and a version tagged "internal" (play-internal configuration).
+    version_code = build_bundle("cap:sync:play-internal")
+    upload_bundle("internal", version_code, release_status: options.fetch(:status, "draft"))
     UI.success("Uploaded #{package_version} (#{version_code}) to internal testing")
   end
 
-  desc "Promote the internal testing build of package.json's version to production"
+  desc "Rebuild package.json's version with real ads and upload it to the production track"
   lane :production do |options|
     version = package_version
-    version_code = google_play_track_version_codes(track: "internal").map(&:to_i).max
     names = google_play_track_release_names(track: "internal")
-    unless version_code && names.include?(version)
+    unless names.include?(version)
       UI.user_error!("Internal testing has #{names.join(', ').then { |n| n.empty? ? 'nothing' : n }}, not #{version}. " \
                      "Merge the version bump into develop and let CI upload it first.")
     end
-    if google_play_track_version_codes(track: "production").map(&:to_i).include?(version_code)
-      UI.success("#{version} (#{version_code}) is already in production")
+    if google_play_track_release_names(track: "production").include?(version)
+      UI.success("#{version} is already in production")
       next
     end
+    # The internal build shows test ads and an "internal" tag, so production gets
+    # its own build of the same code (play configuration) with a new versionCode.
+    version_code = build_bundle("cap:sync:play")
     # rollout:0.2 is a staged rollout to 20% of users; empty or 1 means everyone.
     rollout = options[:rollout].to_s
     staged = !rollout.empty? && rollout.to_f < 1
-    promote(from: "internal", to: "production", rollout: staged ? rollout : nil)
-    UI.success("Promoted #{version} (#{version_code}) to production")
+    upload_bundle("production", version_code, release_status: staged ? "inProgress" : "completed", rollout: staged ? rollout : nil)
+    UI.success("Uploaded #{version} (#{version_code}) to production#{staged ? " at #{rollout}" : ''}")
   end
 
   desc "Promote the latest release of one track to another"
