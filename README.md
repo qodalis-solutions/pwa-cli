@@ -108,7 +108,8 @@ default.
 | Command | What it does |
 | --- | --- |
 | `npm run android:apk` | Build, `cap sync`, debug APK |
-| `npm run android:bundle` | Build, `cap sync`, signed release bundle (upload key from the git-ignored `android/keystore.properties`) |
+| `npm run android:bundle` | Build, `cap sync`, signed release bundle with real ads (upload key from the git-ignored `android/keystore.properties`) |
+| `npm run cap:sync:play-internal` | Build like the Play internal-testing bundle (test ads, version tagged `internal`) and `cap sync` |
 | `npm run android:open` | Open the project in Android Studio |
 | `npm run cap:sync` | Build and copy the web app into `android/` |
 
@@ -117,17 +118,17 @@ default.
 ```mermaid
 flowchart LR
   F[feature/*] -- PR --> D[develop]
-  D -- CI: signed build --> T[Play internal testing]
+  D -- CI: signed build, test ads --> T[Play internal testing]
   D -- PR --> M[main]
-  M -- CI: promote the tested build --> P[Play production]
+  M -- CI: rebuild with real ads --> P[Play production]
   M -- CI --> W[PWA on GitHub Pages]
 ```
 
 | Event | CI job | Result |
 | --- | --- | --- |
 | Pull request into `develop` or `main` | `ci.yml` | Build, Playwright tests, Android debug APK |
-| Merge into `develop` | `ci.yml` | Build, Playwright tests, signed bundle rolled out to Play internal testers |
-| Merge into `main` | `release.yml` | Publishes the PWA and promotes the exact build testers had to production; nothing is rebuilt |
+| Merge into `develop` | `ci.yml` | Build, Playwright tests, signed bundle rolled out to Play internal testers: Google's test ads, version tagged `· internal` |
+| Merge into `main` | `release.yml` | Publishes the PWA, rebuilds the version testers had with the real ads and uploads it to production under a new versionCode |
 
 To release:
 
@@ -144,9 +145,9 @@ Google Play from the command line with [fastlane](https://fastlane.tools) (`bund
 | Command | What it does |
 | --- | --- |
 | `bundle exec fastlane status` | Versions on each track and the next versionCode |
-| `bundle exec fastlane internal` | Build the signed bundle and upload it to internal testing |
+| `bundle exec fastlane internal` | Build the signed bundle with test ads and upload it to internal testing |
 | `bundle exec fastlane rollout` | Roll out a draft release on a track to its testers |
-| `bundle exec fastlane production` | Promote the internal build of `package.json`'s version (`rollout:0.2` for a staged rollout) |
+| `bundle exec fastlane production` | Rebuild `package.json`'s version (once testers have it) with real ads and upload it to production (`rollout:0.2` for a staged rollout) |
 | `bundle exec fastlane listing images_only:true` | Upload icon, feature graphic and screenshots (drop `images_only` to include the text) |
 
 `npm run play:status`, `play:internal`, `play:promote` and `play:listing` call the matching lanes.

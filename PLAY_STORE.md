@@ -10,9 +10,9 @@ Play Console account owner can do.
 | App name | Qodalis CLI |
 | Target / compile SDK | 36 (Android 16), minimum SDK 24 (Android 7.0) |
 | Permissions | `INTERNET`; since 1.0.4 `ACCESS_NETWORK_STATE` (`network` command) and `VIBRATE` (`vibrate`), both install-time, no runtime prompt (plus AndroidX's internal, signature-level receiver permission). Firebase Analytics (since 1.0.5) adds the install-time `WAKE_LOCK` and Play install-referrer permissions. Since 1.0.7 the AdMob SDK adds `AD_ID`, `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION` and `ACCESS_ADSERVICES_TOPICS` (install-time); before, the manifest removed them |
-| Ads | Since 1.0.7, Android only: one adaptive AdMob banner at the top (`src/app/ads.ts`), after Google's consent message (UMP; no ads without a consent decision), hidden while a game or nano runs; `privacy choices` reopens the consent form. AdMob app `ca-app-pub-5597997223302010~2904284252`, banner unit `ca-app-pub-5597997223302010/5044408612`, used only by the Play bundle (`play` build configuration, `ad-units.play.ts`); every other build shows Google's test banner. The consent message, frequency settings and app-ads.txt (cli.qodalis.com and qodalis.com) live in the AdMob account |
+| Ads | Since 1.0.7, Android only: one adaptive AdMob banner at the top (`src/app/ads.ts`), after Google's consent message (UMP; no ads without a consent decision), hidden while a game or nano runs; `privacy choices` reopens the consent form. AdMob app `ca-app-pub-5597997223302010~2904284252`, banner unit `ca-app-pub-5597997223302010/5044408612`, used only by the Play production bundle (`play` build configuration, `ad-units.play.ts`); every other build shows Google's test banner, internal-testing bundles included (`play-internal` configuration, so testers' taps never count as invalid traffic). The consent message, frequency settings and app-ads.txt (cli.qodalis.com and qodalis.com) live in the AdMob account |
 | Analytics | Firebase project `qodalis-cli`; its config `android/app/google-services.json` is committed (it holds identifiers, not secrets: restrict the API key to `com.qodalis.cli` in Google Cloud). Events: Firebase's automatic ones plus `command_run` (`command`, `success`), see `src/app/analytics.ts`; users opt out with `analytics off` |
-| Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab`; CI uploads from `develop` |
+| Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab` (real ads); CI uploads a test-ads build from `develop` and a real-ads build from `main` |
 | Listing text and images | `fastlane/metadata/android/en-US/` |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
 
@@ -138,12 +138,17 @@ production go through Google's review, from hours to days for a new app.
 | Push to | CI does | Who gets it |
 | --- | --- | --- |
 | pull request | build, Playwright tests, debug APK | nobody |
-| `develop` | tests, then builds a signed bundle and uploads it to **internal testing**, rolled out | internal testers, minutes later |
-| `main` | tests, PWA to GitHub Pages, then **promotes the tested internal build** to production | everyone, after Google's review |
+| `develop` | tests, then builds a signed bundle with **test ads** (`play-internal`) and uploads it to **internal testing**, rolled out | internal testers, minutes later |
+| `main` | tests, PWA to GitHub Pages, then **rebuilds the tested version with real ads** (`play`) and uploads it to production | everyone, after Google's review |
 
-Production gets exactly the bundle testers had: `main` never rebuilds. The `production` lane looks
-for the internal build whose version matches `package.json`, and stops with an error if develop has
-not uploaded it yet. If production already has it (a docs-only merge, a re-run), it does nothing.
+Internal builds show Google's sample banner, never the real unit: testers tapping real ads would
+risk invalid-traffic flags on the AdMob account. They also tag the version, so `device` prints
+`App Qodalis CLI 1.0.8 (10023) · internal` on a tester build and the plain version in production.
+
+Production therefore gets its own build of the same code, under its own versionCode. The
+`production` lane checks that internal testing has the version in `package.json`, and stops with an
+error if develop has not uploaded it yet. If production already has that version (a docs-only
+merge, a re-run), it does nothing; otherwise it builds with the `play` configuration and uploads.
 
 Every develop upload takes the next free versionCode from Play (`fastlane status` prints it), so
 several builds of one version can go to testers. Release notes are still named after the version:
@@ -167,7 +172,7 @@ Optional repository variable `PLAY_PRODUCTION_ROLLOUT`: a fraction such as `0.2`
 rollout to 20% of users (widen it with `fastlane promote from:production to:production rollout:0.5`).
 Unset means everyone.
 
-The upload and promotion jobs run in the GitHub environments `play-internal` and `play-production`.
+The internal and production upload jobs run in the GitHub environments `play-internal` and `play-production`.
 Add a required reviewer to `play-production` (Settings → Environments) to approve each production
 release by hand.
 
@@ -180,8 +185,8 @@ Enable GitHub Pages once: Settings → Pages → Source: *GitHub Actions*.
    characters). Merge it into `develop`: testers get the build.
 2. Test it on a phone. Further merges into `develop` upload new builds of the same version.
 3. Fast-forward `main` to `develop` (no release pull request), once `develop`'s CI has passed:
-   `git fetch origin && git push origin origin/develop:refs/heads/main`. CI promotes the tested
-   build to production. `main` and `develop` keep one linear history: the **main history** ruleset
+   `git fetch origin && git push origin origin/develop:refs/heads/main`. CI rebuilds the tested
+   version with real ads and uploads it to production. `main` and `develop` keep one linear history: the **main history** ruleset
    blocks force pushes and anything but a fast-forward, for everyone; **main changes** (pull request
    and checks) lets admins push the release directly.
 
