@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# WorkManager (pulled in by the Google Mobile Ads SDK) opens its Room database by loading the generated
+# WorkDatabase_Impl through reflection. Without these rules R8 strips its constructor and the release build
+# crashes at startup in androidx.startup.InitializationProvider.
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
