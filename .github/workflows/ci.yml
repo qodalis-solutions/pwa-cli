@@ -1,8 +1,9 @@
 name: CI
 
 # Pull requests build and test. Pushes to develop also upload a signed build to
-# Play internal testing, so testers get every merge; main later promotes that
-# same build to production (release.yml). See PLAY_STORE.md.
+# Play internal testing (Google's test ads, version tagged "internal"), so
+# testers get every merge; main later rebuilds that version with the real ads
+# for production (release.yml). See PLAY_STORE.md.
 on:
   pull_request:
     branches: [main, develop]
