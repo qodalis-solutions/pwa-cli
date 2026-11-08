@@ -24,7 +24,7 @@ export const adsModule: ICliModule = {
     }
     context.events.on('command:executed', ({ data }) => {
       if (commandName(data.command, registry)) {
-        void ads.commandRun();
+        ads.commandRun();
       }
     });
   },
