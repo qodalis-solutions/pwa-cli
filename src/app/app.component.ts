@@ -118,6 +118,12 @@ export class AppComponent {
     // The consent message and the banner come once the terminal is on screen (Android only).
     if (platform === 'android') {
       ads.init();
+      // A full-screen ad waits for a pause: any key or touch puts it off.
+      const active = () => ads.userActive();
+      for (const event of ['keydown', 'pointerdown'] as const) {
+        document.addEventListener(event, active, { capture: true, passive: true });
+        this.destroyRef.onDestroy(() => document.removeEventListener(event, active, { capture: true }));
+      }
     }
   }
 

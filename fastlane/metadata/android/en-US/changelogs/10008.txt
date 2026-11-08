@@ -1,2 +1,3 @@
 • Ads work again: the banner at the top of the screen did not load in 1.0.7
-• Now and then, between commands, a full-screen ad: at most one every 5 minutes, never in your first minutes and never while a game or nano is open
+• The banner now appears a minute after you open the app
+• Now and then, between commands, a full-screen ad: at most one every 5 minutes, only when you pause, never in your first minutes and never while a game or nano is open

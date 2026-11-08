@@ -29,16 +29,30 @@ export type AdMobApi = Pick<
 /** The banner's height in CSS pixels; the shell leaves that much room above the terminal. */
 export const BANNER_HEIGHT_VAR = '--ad-banner-height';
 
+/** The banner appears this long after the terminal is ready, so the app opens without an ad. */
+export const BANNER_DELAY_MS = 60_000;
+
 /** A full-screen ad comes after this many commands... */
 export const INTERSTITIAL_EVERY = 15;
 /** ...at least this long after the previous one... */
 export const INTERSTITIAL_GAP_MS = 5 * 60_000;
 /** ...and never in the first minutes after the app opens. */
 export const INTERSTITIAL_FIRST_MS = 3 * 60_000;
+/** It waits for the user to pause this long (no key or touch), so it never cuts into typing or reading. */
+export const INTERSTITIAL_IDLE_MS = 5_000;
 
 /** The plugin's event names and options, as strings so this file loads without the plugin. */
 const SIZE_CHANGED = 'bannerAdSizeChanged';
 const CONSENT_REQUIRED = 'REQUIRED';
+
+/** Time, replaceable in tests. */
+export interface AdsClock {
+  now(): number;
+  /** Runs fn once, ms from now. */
+  after(ms: number, fn: () => unknown): void;
+}
+
+const realClock: AdsClock = { now: () => Date.now(), after: (ms, fn) => void setTimeout(fn, ms) };
 
 export interface AdUnits {
   /** Whether these are the real units (the Play bundle) or Google's test units. */
@@ -66,6 +80,12 @@ export class Ads {
   /** When the last full-screen ad showed, or the app opened. */
   private lastFullScreen: number;
   private interstitial: 'none' | 'loading' | 'ready' = 'none';
+  /** When the banner may first show: BANNER_DELAY_MS after init. */
+  private bannerFrom = Infinity;
+  /** The user's last key press or touch. */
+  private lastActivity = -Infinity;
+  /** A full-screen ad waits for a pause in the user's activity. */
+  private waiting = false;
 
   constructor(
     /**
@@ -75,9 +95,9 @@ export class Ads {
     private readonly load: () => Promise<{ AdMob: AdMobApi } | undefined>,
     private readonly root: { style: { setProperty(name: string, value: string): void } },
     private readonly units: AdUnits,
-    private readonly now: () => number = Date.now,
+    private readonly clock: AdsClock = realClock,
   ) {
-    this.lastFullScreen = now() - INTERSTITIAL_GAP_MS + INTERSTITIAL_FIRST_MS;
+    this.lastFullScreen = clock.now() - INTERSTITIAL_GAP_MS + INTERSTITIAL_FIRST_MS;
   }
 
   /** Whether the user must be offered a way to change their consent (EEA, UK, Switzerland). */
@@ -85,8 +105,12 @@ export class Ads {
     return this.privacyOptions;
   }
 
-  /** Gathers consent, starts the Mobile Ads SDK and shows the banner. Safe to call more than once. */
+  /** Gathers consent, starts the Mobile Ads SDK and, BANNER_DELAY_MS later, shows the banner. Safe to call more than once. */
   init(): Promise<void> {
+    if (!this.initialization) {
+      this.bannerFrom = this.clock.now() + BANNER_DELAY_MS;
+      this.clock.after(BANNER_DELAY_MS, () => void this.sync());
+    }
     this.initialization ??= this.initialize();
     return this.initialization;
   }
@@ -97,30 +121,55 @@ export class Ads {
     return this.sync();
   }
 
+  /** The user pressed a key or touched the screen: a waiting full-screen ad gives way. */
+  userActive(): void {
+    this.lastActivity = this.clock.now();
+  }
+
   /**
    * Counts a command the user ran. Every INTERSTITIAL_EVERY commands, once the
-   * last full-screen ad is INTERSTITIAL_GAP_MS old, a preloaded one shows: the
-   * command has finished, so it never interrupts work, and never while a
+   * last full-screen ad is INTERSTITIAL_GAP_MS old, a preloaded one shows after
+   * the command has finished and the user has paused for INTERSTITIAL_IDLE_MS;
+   * a key or touch in that pause puts it off to a later command. Never while a
    * full-screen command (game, nano) is open. Without a loaded ad or consent
    * the count waits for the next command.
    */
-  commandRun(): Promise<void> {
+  commandRun(): void {
     this.commands++;
+    if (!this.waiting && this.fullScreenDue()) {
+      this.waiting = true;
+      const since = this.clock.now();
+      this.clock.after(INTERSTITIAL_IDLE_MS, () => {
+        this.waiting = false;
+        return this.lastActivity > since ? undefined : this.showFullScreen();
+      });
+    }
+  }
+
+  private fullScreenDue(): boolean {
     if (
       this.commands < INTERSTITIAL_EVERY ||
-      this.now() - this.lastFullScreen < INTERSTITIAL_GAP_MS ||
+      this.clock.now() - this.lastFullScreen < INTERSTITIAL_GAP_MS ||
       !this.wanted ||
       !this.canRequestAds ||
       !this.started
     ) {
-      return Promise.resolve();
+      return false;
     }
     if (this.interstitial !== 'ready') {
       this.prepareInterstitial();
+      return false;
+    }
+    return true;
+  }
+
+  private showFullScreen(): Promise<void> {
+    // Things may have changed during the pause (a game started, consent withdrawn).
+    if (!this.fullScreenDue()) {
       return Promise.resolve();
     }
     this.commands = 0;
-    this.lastFullScreen = this.now();
+    this.lastFullScreen = this.clock.now();
     this.interstitial = 'none';
     this.queue = this.queue
       .then(() => this.admob!.showInterstitial())
@@ -214,7 +263,7 @@ export class Ads {
     if (!admob || !this.started) {
       return;
     }
-    const show = this.wanted && this.canRequestAds;
+    const show = this.wanted && this.canRequestAds && this.clock.now() >= this.bannerFrom;
     if (show === this.visible) {
       return;
     }
