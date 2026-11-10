@@ -63,6 +63,19 @@ test.describe('extra keys row', () => {
     await expect.poll(() => currentLine(page)).not.toContain('never-run');
   });
 
+  test('^C stops a running command', async ({ page }) => {
+    await openTerminal(page);
+    await run(page, 'events watch', { wait: false });
+    await expect.poll(() => terminalText(page)).toContain('press Ctrl+C to stop');
+    const running = () => page.evaluate(() => !!(window as any).qodalisCli.getContext().isExecuting);
+    await expect.poll(running).toBe(true);
+
+    await tapKey(page, 'Control C');
+
+    await expect.poll(running, { timeout: 15_000 }).toBe(false);
+    await expect.poll(() => currentLine(page)).toMatch(/[$#>]\s*$/);
+  });
+
   test('CTRL then a letter on the keyboard sends the shortcut (Ctrl+L clears)', async ({ page }) => {
     await openTerminal(page);
     await run(page, 'echo clutter');
