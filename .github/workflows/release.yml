@@ -54,7 +54,7 @@ jobs:
         with:
           path: dist/pwa-cli/browser
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # Each native platform gets its own production job (iOS: App Store, later).
   android-production:
