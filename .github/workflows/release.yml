@@ -102,7 +102,7 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: bundle exec fastlane production rollout:${{ vars.PLAY_PRODUCTION_ROLLOUT || '1' }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: app-production-bundle
           path: android/app/build/outputs/bundle/release/app-release.aab
