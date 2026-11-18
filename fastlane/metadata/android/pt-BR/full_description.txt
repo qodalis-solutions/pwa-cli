@@ -1,0 +1,37 @@
+O Qodalis CLI coloca uma linha de comando de verdade no seu celular. Digite um comando e toque em Enter: mais de 100 comandos rodam direto no seu aparelho, funcionam offline e não precisam de conta online.
+
+FERRAMENTAS PARA O DIA A DIA
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary e morse
+• generate-password para senhas aleatórias e fortes
+• qr desenha QR codes no próprio terminal
+• Gráficos e Markdown exibidos no terminal
+• Ferramentas de regex, json e csv, e de texto: upper, camelCase, slug, pad, replace e mais
+• cal, timestamps, agendamentos cron, lorem ipsum e números aleatórios
+• Uma lista de tarefas, um cronômetro e um timer
+• curl e wget para requisições HTTP, speed-test para testar sua conexão
+
+ARQUIVOS E O EDITOR NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail e wc
+• Edite qualquer arquivo com o editor nano integrado
+• Pipes, aliases, variáveis de ambiente, busca no histórico e preenchimento com Tab
+• Seus arquivos ficam no seu aparelho entre uma sessão e outra
+
+JOGOS, E MAIS COM PKG
+• 2048, Tetris, Snake, Campo Minado, Sudoku e Wordle, pelo toque ou pelo teclado
+• pkg browse lista pacotes extras e pkg add instala um em segundos
+• Lig 4, Forca, o jogo do 15 e Mastermind estão chegando
+
+SEU CELULAR NA LINHA DE COMANDO
+• device, battery e network mostram o que seu celular está fazendo
+• share envia a saída de qualquer comando para outro app; vibrate e toast para seus scripts
+
+FEITO PARA TELAS SENSÍVEIS AO TOQUE
+• Uma fileira de teclas com Esc, Tab, Ctrl+C, Ctrl+L, setas e os símbolos que os teclados do celular escondem
+• Digitação sem correção automática, para que os comandos cheguem exatamente como você digitou
+• Um tour rápido na primeira abertura mostra o básico
+• Temas, tamanho de fonte ajustável e 11 idiomas: inglês, alemão, espanhol, francês, italiano, japonês, coreano, português, romeno, russo e chinês
+
+SEUS DADOS FICAM COM VOCÊ
+Sua conta, seus arquivos e suas tarefas ficam salvos apenas no seu aparelho. O app só usa a internet para os comandos que precisam dela, como curl ou speed-test, e para exibir anúncios. Estatísticas de uso anônimas ajudam a melhorar o app; desative-as com analytics off.
+
+O Qodalis CLI é gratuito, de código aberto e baseado no framework de terminal web da Qodalis: https://cli.qodalis.com
