@@ -32,7 +32,7 @@
     "@angular/platform-browser": "^22.2.0",
     "@angular/service-worker": "^22.2.0",
     "@capacitor-community/admob": "^8.3.0",
-    "@capacitor-firebase/analytics": "^8.5.2",
+    "@capacitor-firebase/analytics": "^8.6.0",
     "@capacitor/android": "^8.0.0",
     "@capacitor/app": "^8.0.0",
     "@capacitor/core": "^8.0.0",
