@@ -18,9 +18,10 @@ that run offline, with no online account and only anonymous usage statistics (An
 [Docs](https://cli.qodalis.com/docs) ·
 [Privacy](https://cli.qodalis.com/privacy/)
 
-<img src="public/screenshots/phone-1.png" width="240" alt="Plugin commands">&nbsp;
-<img src="public/screenshots/phone-2.png" width="240" alt="Developer tools: UUIDs, strings, Base64, hashes, passwords">&nbsp;
-<img src="public/screenshots/phone-3.png" width="240" alt="Terminal games">
+<img src="public/screenshots/phone-2.png" width="200" alt="Everyday tools: strings, Base64, hashes, GUIDs, passwords, QR codes">&nbsp;
+<img src="public/screenshots/phone-4.png" width="200" alt="Files and the nano editor">&nbsp;
+<img src="public/screenshots/phone-5.png" width="200" alt="Charts and Markdown">&nbsp;
+<img src="public/screenshots/phone-3.png" width="200" alt="2048 in the terminal">
 
 </div>
 
@@ -151,7 +152,7 @@ Google Play from the command line with [fastlane](https://fastlane.tools) (`bund
 | `bundle exec fastlane internal` | Build the signed bundle with test ads and upload it to internal testing |
 | `bundle exec fastlane rollout` | Roll out a draft release on a track to its testers |
 | `bundle exec fastlane production` | Rebuild `package.json`'s version (once testers have it) with real ads and upload it to production (`rollout:0.2` for a staged rollout) |
-| `bundle exec fastlane listing images_only:true` | Upload icon, feature graphic and screenshots (drop `images_only` to include the text) |
+| `bundle exec fastlane listing` | Upload the listing text in every language, icon, feature graphic and screenshots (`validate:true` for a dry run, `images_only:true` for images only) |
 
 `npm run play:status`, `play:internal`, `play:promote` and `play:listing` call the matching lanes.
 
@@ -160,9 +161,12 @@ Google Play from the command line with [fastlane](https://fastlane.tools) (`bund
 | Command | What it does |
 | --- | --- |
 | `npm run assets` | Every icon and splash screen from the SVGs in `resources/` |
-| `npm run screenshots` | Play screenshots and feature graphic into `fastlane/metadata` (needs a production build) |
+| `npm run screenshots` | 8 phone, 8 7-inch and 8 10-inch tablet screenshots and the feature graphic into `fastlane/metadata`, the phone ones also into `public/screenshots` (needs a production build and the network, for `pkg browse`) |
 
-Listing text and images live in [`fastlane/metadata/android/en-US`](fastlane/metadata/android/en-US). The privacy
+Listing text lives in [`fastlane/metadata/android`](fastlane/metadata/android), one folder per Play locale: en-US,
+de-DE, es-ES, es-419, fr-FR, it-IT, ja-JP, ko-KR, pl-PL, pt-BR, pt-PT, ro, ru-RU, tr-TR, uk, zh-CN and zh-TW (title at
+most 30 characters, short description 80, full description 4000; command names stay in English). Images and release
+notes are in en-US only; the other languages show the English images. The privacy
 policy is served at https://cli.qodalis.com/privacy/ (source in web-cli, `apps/docs/src/static/privacy`);
 [`public/privacy.html`](public/privacy.html) is the copy shipped with the app and shown by the `privacy` command. Keep
 the two in sync.
