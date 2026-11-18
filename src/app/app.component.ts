@@ -10,8 +10,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwUpdate } from '@angular/service-worker';
 import { CliComponent, CliModule } from '@qodalis/angular-cli';
-import { CliEngine } from '@qodalis/cli';
-import { CliLogLevel, CliOptions } from '@qodalis/cli-core';
+import { CliEngine, CliEngineOptions } from '@qodalis/cli';
+import { CliLogLevel } from '@qodalis/cli-core';
 import { filter } from 'rxjs';
 
 import { BUILD_CHANNEL } from './build-channel';
@@ -38,8 +38,10 @@ const BACK_TWICE_MS = 1500;
   styleUrl: './app.component.sass',
 })
 export class AppComponent {
-  readonly options: CliOptions = {
+  readonly options: CliEngineOptions = {
     logLevel: CliLogLevel.ERROR,
+    // touch-scroll.ts scrolls the terminal, holding the keyboard back and pausing for game boards.
+    touchScroll: false,
     terminalOptions: {
       allowTransparency: false,
       scrollback: 5000,
