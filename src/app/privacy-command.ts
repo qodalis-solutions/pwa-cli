@@ -6,6 +6,7 @@ import {
   ICliModule,
 } from '@qodalis/cli-core';
 
+import { IntroCommandProcessor } from './intro/intro';
 import { ads } from './native/ads-android';
 import { platform } from './native/native-shell';
 
@@ -81,5 +82,5 @@ export class PrivacyCommandProcessor implements ICliCommandProcessor {
 export const appModule: ICliModule = {
   apiVersion: 2,
   name: 'app',
-  processors: [new PrivacyCommandProcessor()],
+  processors: [new PrivacyCommandProcessor(), new IntroCommandProcessor()],
 };

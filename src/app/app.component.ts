@@ -3,8 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  effect,
   inject,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -22,6 +24,8 @@ import { ExtraKeysComponent } from './extra-keys/extra-keys.component';
 import { sendKey, sendPress } from './extra-keys/send-key';
 import { StickyModifier } from './extra-keys/sticky-modifier';
 import { CommandControls, commandPad, CommandPad, swipeKey } from './command-keys/command-keys';
+import { deviceIntroLocale, introRequest, introSeen, markIntroSeen } from './intro/intro';
+import { IntroComponent } from './intro/intro.component';
 import { ads } from './native/ads-android';
 import { hideSplash, initNativeShell, platform } from './native/native-shell';
 import { enableTouchScroll } from './touch-scroll';
@@ -32,7 +36,7 @@ const BACK_TWICE_MS = 1500;
 
 @Component({
   selector: 'app-root',
-  imports: [CliModule, ExtraKeysComponent],
+  imports: [CliModule, ExtraKeysComponent, IntroComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass',
@@ -61,8 +65,17 @@ export class AppComponent {
   private controls?: CommandControls;
   private command?: CommandPad;
   readonly playing = signal(false);
+  /** The introduction, shown over the terminal on the first launch and by the `intro` command. */
+  readonly intro = introRequest;
+
+  /** Set once boot is done: commands from the introduction's "Try it" wait for it. */
+  private engine?: CliEngine;
+  private pendingCommand?: string;
+  /** On the first launch, ads (the consent message, then the banner) wait for the introduction to close. */
+  private adsPending = false;
 
   private readonly cli = viewChild.required(CliComponent);
+  private readonly introView = viewChild(IntroComponent);
   private background = '';
   private lastBack = 0;
   private readonly destroyRef = inject(DestroyRef);
@@ -76,6 +89,14 @@ export class AppComponent {
       destroyRef.onDestroy(trackVisualViewport());
     }
     destroyRef.onDestroy(watchTouchKeyboard((touch) => this.showKeys.set(touch)));
+    if (!introSeen()) {
+      introRequest.set({ trigger: 'first_run', locale: deviceIntroLocale() });
+    }
+    // The banner gives the introduction the whole screen, and comes back after it.
+    effect(() => {
+      const open = !!introRequest();
+      untracked(() => void ads.setWanted(!open && !this.controls));
+    });
     initNativeShell(() => this.onBack());
     // The terminal draws within a frame or two of the first render; engineReady
     // only fires after the welcome animation, which is too late for the splash.
@@ -117,16 +138,64 @@ export class AppComponent {
     terminal.onRender(() => this.syncBackground(terminal.options.theme?.background));
     // Boot and the welcome message are done; end-to-end tests wait for this.
     (window as unknown as { qodalisCli?: CliEngine }).qodalisCli = engine;
-    // The consent message and the banner come once the terminal is on screen (Android only).
+    this.engine = engine;
+    // The consent message and the banner come once the terminal is on screen
+    // and the introduction has closed (Android only).
     if (platform === 'android') {
-      ads.init();
-      // A full-screen ad waits for a pause: any key or touch puts it off.
-      const active = () => ads.userActive();
-      for (const event of ['keydown', 'pointerdown'] as const) {
-        document.addEventListener(event, active, { capture: true, passive: true });
-        this.destroyRef.onDestroy(() => document.removeEventListener(event, active, { capture: true }));
+      if (introRequest()) {
+        this.adsPending = true;
+      } else {
+        this.startAds();
       }
     }
+    if (this.pendingCommand) {
+      this.runCommand(engine, this.pendingCommand);
+      this.pendingCommand = undefined;
+    }
+  }
+
+  /** The introduction closed: the terminal gets the focus, or runs the command of its "Try it". */
+  onIntroClosed(command: string | undefined): void {
+    markIntroSeen();
+    introRequest.set(undefined);
+    if (this.adsPending) {
+      this.adsPending = false;
+      this.startAds();
+    }
+    // The terminal is inert until the introduction is gone.
+    setTimeout(() => {
+      if (command && this.engine) {
+        this.runCommand(this.engine, command);
+      } else if (command) {
+        // Still booting (or the first-run account setup): runs once the prompt is ready.
+        this.pendingCommand = command;
+      }
+      this.cli().getEngine()?.focus();
+    });
+  }
+
+  private startAds(): void {
+    ads.init();
+    // A full-screen ad waits for a pause: any key or touch puts it off.
+    const active = () => ads.userActive();
+    for (const event of ['keydown', 'pointerdown'] as const) {
+      document.addEventListener(event, active, { capture: true, passive: true });
+      this.destroyRef.onDestroy(() => document.removeEventListener(event, active, { capture: true }));
+    }
+  }
+
+  /** Types a command at the prompt and presses Enter, as the user would. */
+  private runCommand(engine: CliEngine, command: string): void {
+    const context = engine.getContext();
+    if (!context || context.isExecuting || context.contextProcessor) {
+      return;
+    }
+    if (context.currentLine) {
+      context.clearCurrentLine();
+    }
+    const terminal = engine.getTerminal();
+    terminal.input(command, true);
+    terminal.input('\r', true);
   }
 
   onExtraKey(key: ExtraKey): void {
@@ -284,12 +353,18 @@ export class AppComponent {
   }
 
   /**
-   * The Android back button leaves what is on screen first: in a game, a
+   * The Android back button leaves what is on screen first: it skips the
+   * introduction; in a game, a
    * full-screen app or a prompt it presses Escape. A second press within
    * {@link BACK_TWICE_MS} still sends the app to the background, for screens
    * that Escape does not close (nano exits with Ctrl+X).
    */
   private onBack(): boolean {
+    const intro = this.introView();
+    if (intro) {
+      intro.skip();
+      return true;
+    }
     const context = this.cli().getEngine()?.getContext();
     const busy = !!context && (context.isExecuting || !!context.contextProcessor);
     const now = Date.now();
