@@ -132,6 +132,16 @@ test('games: snake', async ({ page }) => {
   await capture(page, 'games', status, 150);
 });
 
+test('more packages: pkg browse', async ({ page }) => {
+  // Searches the npm registry: needs the network.
+  await openTerminal(page);
+  await clearScreen(page);
+  await run(page, 'pkg browse');
+  await expect.poll(() => terminalLines(page)).toContainEqual(expect.stringMatching(/Available packages/));
+  await scrollToCommand(page, 'pkg browse');
+  await capture(page, 'packages', 11);
+});
+
 test('make it yours: theme list', async ({ page }) => {
   await openTerminal(page);
   await clearScreen(page);

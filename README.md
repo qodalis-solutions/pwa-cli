@@ -68,6 +68,7 @@ The CLI engine with every plugin that runs on the device; none needs a server. T
 | Phone | `device`, `battery`, `network`, `share` (text or piped output, to any app), `vibrate`, `toast` |
 | Games | 2048, Tetris, Snake, Minesweeper, Sudoku, Wordle; play by touch (pads, swipes, taps) or keyboard |
 | Languages | English plus 10 translations; starts in the device language when one matches |
+| More packages | `pkg browse` lists the published plugins, `pkg add <name>` installs one from the npm CDNs (unpkg, jsDelivr) and keeps it across launches, `pkg remove` drops it. Games that are not bundled come this way |
 
 The users plugin is included: the first launch asks for the owner's account (user name, email, password) and signs it
 in; later launches restore the session. Accounts stay on the device.
@@ -76,7 +77,7 @@ in; later launches restore the session. Accounts stay on the device.
 
 | Feature | Details |
 | --- | --- |
-| Introduction | On the first launch, six slides (swipe, dots, Next, arrow keys) show what the app can do before the terminal; each slide shows a screenshot of the real app (`npm run intro-images`) and its "Try it" runs that command. `intro` opens it again. Translated into the CLI's languages; the Android consent message and banner wait until it closes (`src/app/intro/`) |
+| Introduction | On the first launch, seven slides (swipe, dots, Next, arrow keys) show what the app can do before the terminal; each slide shows a screenshot of the real app (`npm run intro-images`) and its "Try it" runs that command. `intro` opens it again. Translated into the CLI's languages; the Android consent message and banner wait until it closes (`src/app/intro/`) |
 | Extra keys | Two rows: Esc, Tab, Ctrl+C, Home, End, Del, arrows and `/ \| -`, sent as real key presses (`src/app/extra-keys/`). CTRL is sticky: tap it, then a key (also on the keyboard: Ctrl+A/E/U/K/W/L); double-tap locks it. Held arrows and Del repeat |
 | Command keys | Full-screen commands declare the keys they read (`controls` in `@qodalis/cli-core`), shown in place of the extra keys (`src/app/command-keys/`). Games get big buttons, swipes send arrows and a tap rotates (Tetris) or reveals (Minesweeper), and the on-screen keyboard closes while a hardware keyboard keeps working. `nano` (Save, Exit, Find, Cut, Paste, PgUp/PgDn), Wordle and other text commands keep the keyboard with a compact row |
 | Keyboard-aware layout | The terminal stays above the on-screen keyboard (`src/app/viewport.ts`) |

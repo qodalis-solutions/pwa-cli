@@ -56,16 +56,16 @@ test.describe('first-run introduction', () => {
     await expect(dialog(page)).toHaveCount(0);
   });
 
-  test('Next leads through the six slides to Get started', async ({ page }) => {
+  test('Next leads through the seven slides to Get started', async ({ page }) => {
     await recordEvents(page);
     await page.goto('/');
-    const titles = ['Welcome', 'Getting around', 'Everyday tools', 'Files', 'Games', 'Make it yours'];
+    const titles = ['Welcome', 'Getting around', 'Everyday tools', 'Files', 'Games', 'More packages', 'Make it yours'];
     for (const [i, title] of titles.entries()) {
       await expect(currentSlide(page).getByRole('heading')).toHaveText(title);
       await expect(dialog(page).locator('.dot').nth(i)).toHaveAttribute('aria-current', 'step');
       if (i > 0) {
         // Screen readers hear the slide change.
-        await expect(dialog(page).locator('[aria-live]')).toHaveText(`Slide ${i + 1} of 6: ${title}`);
+        await expect(dialog(page).locator('[aria-live]')).toHaveText(`Slide ${i + 1} of 7: ${title}`);
       }
       if (i < titles.length - 1) {
         await dialog(page).getByRole('button', { name: 'Next' }).click();
