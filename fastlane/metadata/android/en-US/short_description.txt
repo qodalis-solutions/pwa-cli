@@ -1,1 +1,1 @@
-An offline terminal with 100+ commands: dev tools, files, text utilities, games.
+Offline terminal with 100+ commands: dev tools, files, nano, QR, charts, games

@@ -1,33 +1,37 @@
-Qodalis CLI puts a real command line on your phone. It runs entirely on your device, works offline, needs no online account and collects no data.
+Qodalis CLI puts a real command line on your phone. Type a command, press Enter: more than 100 commands run right on your device, work offline and need no online account.
 
-DEVELOPER TOOLS
+EVERYDAY TOOLS
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary and morse
-• regex test, match, replace and extract
-• json format, minify and validate; csv parse, filter, sort and convert
-• string tools: upper, lower, camelCase, kebab-case, slug, trim, pad, replace and more
-• timestamps, calendar, cron schedules, lorem ipsum, random numbers and passwords
-• curl and wget for HTTP requests, plus an internet speed test
+• generate-password for strong random passwords
+• qr draws QR codes right in the terminal
+• Charts and Markdown rendered in the terminal
+• regex, json and csv tools, plus string tools: upper, camelCase, slug, pad, replace and more
+• cal, timestamps, cron schedules, lorem ipsum and random numbers
+• A to-do list, a stopwatch and a countdown timer
+• curl and wget for HTTP requests, speed-test for your connection
 
-A FILE SYSTEM IN YOUR POCKET
-• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, uniq, head, tail and wc
-• Pipes, aliases, environment variables, history search and tab completion
-• Edit files with the built-in nano editor
-• Files are kept on your device between sessions
+FILES AND THE NANO EDITOR
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail and wc
+• Edit any file with the built-in nano editor
+• Pipes, aliases, environment variables, history search and Tab completion
+• Your files stay on your device between sessions
 
-PRODUCTIVITY
-• To-do list, stopwatch and countdown timer
-• QR code generator, Markdown renderer and terminal charts
-• Snippets and scripts you can save and run again
+GAMES, AND MORE WITH PKG
+• 2048, Tetris, Snake, Minesweeper, Sudoku and Wordle, played by touch or keyboard
+• pkg browse lists extra packages and pkg add installs one in seconds
+• Connect Four, Hangman, 15-puzzle and Mastermind are on the way
 
-GAMES
-• 2048, Tetris, Snake, Minesweeper, Sudoku and Wordle, all playable in the terminal
+YOUR PHONE FROM THE COMMAND LINE
+• device, battery and network show what your phone is up to
+• share sends the output of any command to another app; vibrate and toast for your scripts
 
-BUILT FOR TOUCH SCREENS
-• A key row with Esc, Tab, Ctrl+C, Ctrl+L, arrows and symbols that phone keyboards hide
-• A keyboard mode without autocorrect, so commands arrive exactly as typed
-• Themes, adjustable font size and 11 languages
+MADE FOR TOUCH SCREENS
+• A key row with Esc, Tab, Ctrl+C, Ctrl+L, arrows and the symbols phone keyboards hide
+• Typing without autocorrect, so commands arrive exactly as typed
+• A short tour on first launch shows you around
+• Themes, adjustable font size and 11 languages: English, German, Spanish, French, Italian, Japanese, Korean, Portuguese, Romanian, Russian and Chinese
 
-PRIVATE BY DESIGN
-No ads, no analytics, no online sign-up. Your user account and everything you create stay on your device. The app only uses the network when you run a command that needs it, such as curl or speed-test.
+YOUR DATA STAYS WITH YOU
+Your account, files and to-dos are stored only on your device. The app goes online only for commands that need it, such as curl or speed-test, and to show ads. Anonymous usage statistics help improve the app; turn them off with analytics off.
 
-Qodalis CLI is open source and built on the Qodalis web terminal framework: https://cli.qodalis.com
+Qodalis CLI is free, open source and built on the Qodalis web terminal framework: https://cli.qodalis.com
