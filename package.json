@@ -12,6 +12,7 @@
     "e2e": "playwright test",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p e2e/tsconfig.json",
     "screenshots": "STORE_SCREENSHOTS=1 playwright test --project=store",
+    "intro-images": "INTRO_IMAGES=1 playwright test --project=intro-images",
     "assets": "node scripts/generate-assets.mjs",
     "cap:sync": "npm run build && cap sync android",
     "android:open": "cap open android",

@@ -76,7 +76,7 @@ in; later launches restore the session. Accounts stay on the device.
 
 | Feature | Details |
 | --- | --- |
-| Introduction | On the first launch, six slides (swipe, dots, Next, arrow keys) show what the app can do before the terminal; each slide's "Try it" runs an example command. `intro` opens it again. Translated into the CLI's languages; the Android consent message and banner wait until it closes (`src/app/intro/`) |
+| Introduction | On the first launch, six slides (swipe, dots, Next, arrow keys) show what the app can do before the terminal; each slide shows a screenshot of the real app (`npm run intro-images`) and its "Try it" runs that command. `intro` opens it again. Translated into the CLI's languages; the Android consent message and banner wait until it closes (`src/app/intro/`) |
 | Extra keys | Two rows: Esc, Tab, Ctrl+C, Home, End, Del, arrows and `/ \| -`, sent as real key presses (`src/app/extra-keys/`). CTRL is sticky: tap it, then a key (also on the keyboard: Ctrl+A/E/U/K/W/L); double-tap locks it. Held arrows and Del repeat |
 | Command keys | Full-screen commands declare the keys they read (`controls` in `@qodalis/cli-core`), shown in place of the extra keys (`src/app/command-keys/`). Games get big buttons, swipes send arrows and a tap rotates (Tetris) or reveals (Minesweeper), and the on-screen keyboard closes while a hardware keyboard keeps working. `nano` (Save, Exit, Find, Cut, Paste, PgUp/PgDn), Wordle and other text commands keep the keyboard with a compact row |
 | Keyboard-aware layout | The terminal stays above the on-screen keyboard (`src/app/viewport.ts`) |
@@ -96,6 +96,7 @@ Requires Node.js `^22.22.3`, `^24.15.0` or `>=26` (see `engines`).
 | `npm run build` | Production build into `dist/pwa-cli/browser` |
 | `npm run serve:dist` | Serve the production build, service worker on, at http://localhost:8080 |
 | `npm test` | Playwright against the production build (run `npm run build` first) |
+| `npm run intro-images` | Screenshot the real app running each introduction slide's command into `public/intro/` (after a build) |
 
 Playwright runs on an emulated Pixel 7 and on desktop Chrome: boot, plugin commands, file persistence, the extra keys,
 the layout with the keyboard open, the web manifest, offline use and the privacy page. Install the browser once with

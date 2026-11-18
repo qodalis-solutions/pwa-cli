@@ -6,7 +6,8 @@ const PORT = 4321;
  * End-to-end tests run against the production build (`npm run build`), served
  * statically so the service worker behaves as it does when deployed.
  * `npm run screenshots` adds the `store` project, which writes the Google Play
- * and PWA screenshots instead of testing.
+ * and PWA screenshots instead of testing; `npm run intro-images` adds the
+ * `intro-images` project, which writes the introduction's pictures.
  */
 export default defineConfig({
   testDir: 'e2e',
@@ -36,6 +37,15 @@ export default defineConfig({
       testMatch: /.*\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
+    ...(process.env['INTRO_IMAGES']
+      ? [
+          {
+            name: 'intro-images',
+            testMatch: /intro\.images\.ts/,
+            use: { ...devices['Pixel 7'] },
+          },
+        ]
+      : []),
     ...(process.env['STORE_SCREENSHOTS']
       ? [
           {

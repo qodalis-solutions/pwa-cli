@@ -29,6 +29,11 @@ test.describe('first-run introduction', () => {
     await expect(page.locator('main.shell')).toHaveAttribute('inert', '');
     await expect.poll(() => events(page)).toContainEqual({ name: 'intro_shown', params: { trigger: 'first_run' } });
 
+    // The slide's screenshot of the real app, described for screen readers.
+    const image = currentSlide(page).getByRole('img');
+    await expect(image).toHaveAttribute('alt', /help prints the Qodalis CLI banner/);
+    await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth)).toBe(784);
+
     const box = await dialog(page).boundingBox();
     const viewport = page.viewportSize()!;
     expect(box!.height).toBeLessThanOrEqual(viewport.height);
@@ -124,6 +129,7 @@ test.describe('first-run introduction', () => {
       const intro = page.getByRole('dialog', { name: 'Einführung' });
       await expect(intro.getByRole('heading', { name: 'Willkommen' })).toBeVisible();
       await expect(intro.getByRole('button', { name: 'Weiter' })).toBeVisible();
+      await expect(intro.getByRole('img', { name: /help zeigt das Qodalis-CLI-Banner/ })).toBeVisible();
     });
   });
 });

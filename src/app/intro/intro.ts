@@ -14,21 +14,23 @@ import { INTRO_LOCALES } from './intro-i18n';
 export const INTRO_SEEN_KEY = 'qcli.introSeen';
 
 export interface IntroSlide {
-  icon: string;
-  /** A few lines of a terminal: the example command and what it prints. */
-  mock: string[];
-  /** What "Try it" runs at the prompt. */
+  /** A screenshot of the app running `command` (public/intro, made by `npm run intro-images`). */
+  image: string;
+  /** The picture's size in pixels, so the layout does not move while it loads. */
+  width: number;
+  height: number;
+  /** What "Try it" runs at the prompt: the command in the picture. */
   command: string;
 }
 
 /** Welcome, getting around, everyday tools, files, games, make it yours (texts in intro-i18n.ts). */
 export const INTRO_SLIDES: IntroSlide[] = [
-  { icon: '👋', mock: ['$ help', 'Available commands:', '  echo  guid  qr  snake …'], command: 'help' },
-  { icon: '🧭', mock: ['$ he⇥', '$ help', '$ ↑  history'], command: 'history' },
-  { icon: '🧰', mock: ['$ generate-password', 'kX9#vQ2!mL7$wR4p'], command: 'generate-password' },
-  { icon: '📁', mock: ['$ ls', 'notes/  todo.txt', '$ nano todo.txt'], command: 'ls' },
-  { icon: '🎮', mock: ['$ snake', '┌────────────┐', '│ ■■■■▶    ● │', '└────────────┘'], command: 'snake' },
-  { icon: '🎨', mock: ['$ theme list', '■■■ dracula', '■■■ solarized'], command: 'theme list' },
+  { image: 'intro/welcome.webp', width: 784, height: 550, command: 'help' },
+  { image: 'intro/getting-around.webp', width: 784, height: 326, command: 'history' },
+  { image: 'intro/everyday-tools.webp', width: 784, height: 102, command: 'generate-password' },
+  { image: 'intro/files.webp', width: 784, height: 102, command: 'ls' },
+  { image: 'intro/games.webp', width: 784, height: 870, command: 'snake' },
+  { image: 'intro/make-it-yours.webp', width: 784, height: 422, command: 'theme list' },
 ];
 
 export type IntroTrigger = 'first_run' | 'command';
