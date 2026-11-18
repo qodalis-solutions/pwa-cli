@@ -1,0 +1,4 @@
+• A short tour on first launch shows what the app can do; type intro to see it again
+• Add more tools and games with pkg add (pkg browse lists them)
+• Qodalis CLI 2.5.2: the newest commands and fixes
+• The store listing is now in 17 languages
