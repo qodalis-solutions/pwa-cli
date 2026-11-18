@@ -3,7 +3,7 @@ Qodalis CLI to prawdziwy wiersz poleceń w Twoim telefonie. Wpisz polecenie i na
 NARZĘDZIA NA CO DZIEŃ
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary i morse
 • generate-password do mocnych, losowych haseł
-• qr rysuje kody QR prosto w terminalu
+• qr zamienia dowolny tekst lub link w obraz z kodem QR
 • Wykresy i Markdown wyświetlane w terminalu
 • Narzędzia do regex, json i csv oraz do tekstu: upper, camelCase, slug, pad, replace i inne
 • cal, znaczniki czasu, harmonogramy cron, lorem ipsum i liczby losowe

@@ -3,7 +3,7 @@ Qodalis CLI 把真正的命令行装进你的手机。输入命令，按下回�
 日常工具
 • guid、hash（SHA-1/256/384/512）、base64、hex、url、jwt decode、binary 和 morse
 • generate-password 生成高强度随机密码
-• qr 直接在终端里绘制二维码
+• qr 把任意文本或链接变成二维码图片
 • 在终端中显示图表和 Markdown
 • regex、json、csv 工具，以及 upper、camelCase、slug、pad、replace 等字符串工具
 • cal、时间戳、cron 计划、lorem ipsum 和随机数

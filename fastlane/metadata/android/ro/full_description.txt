@@ -3,7 +3,7 @@ Qodalis CLI îți aduce o linie de comandă adevărată pe telefon. Scrii o coma
 UNELTE PENTRU FIECARE ZI
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary și morse
 • generate-password pentru parole aleatorii puternice
-• qr desenează coduri QR chiar în terminal
+• qr transformă orice text sau link într-o imagine cu cod QR
 • Grafice și Markdown afișate în terminal
 • Unelte pentru regex, json și csv, plus unelte pentru text: upper, camelCase, slug, pad, replace și altele
 • cal, marcaje de timp, programări cron, lorem ipsum și numere aleatorii

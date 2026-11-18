@@ -3,7 +3,7 @@ Qodalis CLI 把真正的命令列裝進你的手機。輸入指令，按下 Ente
 日常工具
 • guid、hash（SHA-1/256/384/512）、base64、hex、url、jwt decode、binary 和 morse
 • generate-password 產生高強度隨機密碼
-• qr 直接在終端機裡繪製 QR 碼
+• qr 把任何文字或連結轉成 QR 碼圖片
 • 在終端機中顯示圖表和 Markdown
 • regex、json、csv 工具，以及 upper、camelCase、slug、pad、replace 等字串工具
 • cal、時間戳記、cron 排程、lorem ipsum 和隨機數字

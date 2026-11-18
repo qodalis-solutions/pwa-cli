@@ -3,7 +3,7 @@ Qodalis CLI, telefonunuza gerçek bir komut satırı getirir. Bir komut yazın v
 HER GÜN İÇİN ARAÇLAR
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary ve morse
 • Güçlü, rastgele şifreler için generate-password
-• qr, QR kodlarını doğrudan terminalde çizer
+• qr, herhangi bir metni veya bağlantıyı QR kod görseline dönüştürür
 • Terminalde grafikler ve Markdown
 • regex, json ve csv araçları, ayrıca metin araçları: upper, camelCase, slug, pad, replace ve daha fazlası
 • cal, zaman damgaları, cron zamanlamaları, lorem ipsum ve rastgele sayılar
