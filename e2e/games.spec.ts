@@ -113,7 +113,7 @@ test.describe('games on touch screens', () => {
   test('wordle keeps the keyboard, with its keys in a compact row', async ({ page }) => {
     await openTerminal(page);
     await run(page, 'wordle', { wait: false });
-    await expect.poll(() => terminalText(page), { timeout: 10_000 }).toMatch(/wordle/i);
+    await expect.poll(() => terminalText(page), { timeout: 10_000 }).toMatch(/W\s*O\s*R\s*D\s*L\s*E/i);
     const row = page.locator('app-extra-keys');
     await expect(row.locator('[data-key="Submit the guess"]')).toBeVisible();
     await expect(pad(page)).toHaveCount(0);
