@@ -18,7 +18,7 @@ import { INTRO_SLIDES, IntroTrigger } from './intro';
 const SWIPE_PX = 50;
 
 /**
- * The first-run introduction: six slides over the terminal, turned by swipe,
+ * The first-run introduction: seven slides over the terminal, turned by swipe,
  * the dots, Next or the arrow keys. Every slide's "Try it" closes it and runs
  * an example command; Skip, Escape and "Get started" close it.
  */
