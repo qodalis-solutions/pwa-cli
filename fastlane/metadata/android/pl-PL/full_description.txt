@@ -1,0 +1,37 @@
+Qodalis CLI to prawdziwy wiersz poleceń w Twoim telefonie. Wpisz polecenie i naciśnij Enter: ponad 100 poleceń działa bezpośrednio na urządzeniu, także offline, i nie wymaga żadnego konta online.
+
+NARZĘDZIA NA CO DZIEŃ
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary i morse
+• generate-password do mocnych, losowych haseł
+• qr rysuje kody QR prosto w terminalu
+• Wykresy i Markdown wyświetlane w terminalu
+• Narzędzia do regex, json i csv oraz do tekstu: upper, camelCase, slug, pad, replace i inne
+• cal, znaczniki czasu, harmonogramy cron, lorem ipsum i liczby losowe
+• Lista zadań, stoper i minutnik
+• curl i wget do żądań HTTP, speed-test do sprawdzenia połączenia
+
+PLIKI I EDYTOR NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail i wc
+• Edytuj dowolny plik we wbudowanym edytorze nano
+• Potoki, aliasy, zmienne środowiskowe, wyszukiwanie w historii i uzupełnianie klawiszem Tab
+• Twoje pliki zostają na urządzeniu między sesjami
+
+GRY, A Z PKG JESZCZE WIĘCEJ
+• 2048, Tetris, Snake, Saper, Sudoku i Wordle, dotykiem lub z klawiatury
+• pkg browse pokazuje dodatkowe pakiety, a pkg add instaluje dowolny w kilka sekund
+• Wkrótce: Czwórki, Wisielec, Piętnastka i Mastermind
+
+TWÓJ TELEFON W WIERSZU POLECEŃ
+• device, battery i network pokazują, co dzieje się z telefonem
+• share wysyła wynik dowolnego polecenia do innej aplikacji; vibrate i toast do Twoich skryptów
+
+STWORZONY DO EKRANÓW DOTYKOWYCH
+• Rząd klawiszy z Esc, Tab, Ctrl+C, Ctrl+L, strzałkami i symbolami, które chowają klawiatury telefonów
+• Pisanie bez autokorekty, więc polecenia trafiają dokładnie tak, jak je wpiszesz
+• Krótki samouczek przy pierwszym uruchomieniu pokazuje podstawy
+• Motywy, regulowany rozmiar czcionki i 11 języków: angielski, niemiecki, hiszpański, francuski, włoski, japoński, koreański, portugalski, rumuński, rosyjski i chiński
+
+TWOJE DANE ZOSTAJĄ U CIEBIE
+Twoje konto, pliki i zadania są zapisywane tylko na Twoim urządzeniu. Aplikacja łączy się z internetem tylko dla poleceń, które tego potrzebują, takich jak curl czy speed-test, oraz aby wyświetlać reklamy. Anonimowe statystyki użycia pomagają ulepszać aplikację; wyłączysz je poleceniem analytics off.
+
+Qodalis CLI jest darmowy, open source i oparty na frameworku terminala webowego Qodalis: https://cli.qodalis.com

@@ -1,0 +1,37 @@
+Qodalis CLI는 휴대폰에 진짜 명령줄을 담았습니다. 명령을 입력하고 Enter를 누르세요. 100개가 넘는 명령이 기기에서 바로 실행되고, 오프라인에서도 작동하며, 온라인 계정이 필요 없습니다.
+
+매일 쓰는 도구
+• guid, hash(SHA-1/256/384/512), base64, hex, url, jwt decode, binary, morse
+• 강력한 무작위 비밀번호를 만드는 generate-password
+• qr로 터미널에 바로 QR 코드 그리기
+• 터미널에서 보는 차트와 Markdown
+• regex, json, csv 도구와 upper, camelCase, slug, pad, replace 등 문자열 도구
+• cal, 타임스탬프, cron 일정, lorem ipsum, 난수
+• 할 일 목록, 스톱워치, 카운트다운 타이머
+• HTTP 요청을 위한 curl과 wget, 연결 속도를 재는 speed-test
+
+파일과 nano 편집기
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail, wc
+• 내장 nano 편집기로 어떤 파일이든 편집
+• 파이프, 별칭, 환경 변수, 기록 검색, Tab 자동 완성
+• 파일은 세션이 끝나도 기기에 그대로 남습니다
+
+게임, 그리고 pkg로 더 많이
+• 2048, 테트리스, 스네이크, 지뢰찾기, 스도쿠, Wordle을 터치나 키보드로
+• pkg browse로 추가 패키지를 보고 pkg add로 몇 초 만에 설치
+• 사목, 행맨, 15 퍼즐, 마스터마인드도 곧 나옵니다
+
+명령줄에서 만나는 내 휴대폰
+• device, battery, network로 휴대폰 상태 확인
+• share로 명령 출력을 다른 앱에 보내기, 스크립트에는 vibrate와 toast
+
+터치스크린에 맞춘 설계
+• Esc, Tab, Ctrl+C, Ctrl+L, 화살표, 휴대폰 키보드가 숨기는 기호를 모은 키 줄
+• 자동 수정 없는 입력으로 명령이 입력한 그대로 전달됩니다
+• 처음 실행할 때 짧은 둘러보기로 기본을 안내합니다
+• 테마, 글꼴 크기 조절, 11개 언어: 영어, 독일어, 스페인어, 프랑스어, 이탈리아어, 일본어, 한국어, 포르투갈어, 루마니아어, 러시아어, 중국어
+
+데이터는 내 기기에
+계정, 파일, 할 일은 기기에만 저장됩니다. 앱은 curl이나 speed-test처럼 인터넷이 필요한 명령을 실행할 때와 광고를 표시할 때만 온라인에 연결됩니다. 익명 사용 통계는 앱 개선에 도움이 되며, analytics off로 끌 수 있습니다.
+
+Qodalis CLI는 무료 오픈 소스이며 Qodalis 웹 터미널 프레임워크로 만들어졌습니다: https://cli.qodalis.com

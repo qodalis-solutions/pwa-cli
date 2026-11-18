@@ -1,0 +1,37 @@
+Qodalis CLI, telefonunuza gerçek bir komut satırı getirir. Bir komut yazın ve Enter'a basın: 100'den fazla komut doğrudan cihazınızda çalışır, çevrimdışı kullanılabilir ve hiçbir çevrimiçi hesap gerektirmez.
+
+HER GÜN İÇİN ARAÇLAR
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary ve morse
+• Güçlü, rastgele şifreler için generate-password
+• qr, QR kodlarını doğrudan terminalde çizer
+• Terminalde grafikler ve Markdown
+• regex, json ve csv araçları, ayrıca metin araçları: upper, camelCase, slug, pad, replace ve daha fazlası
+• cal, zaman damgaları, cron zamanlamaları, lorem ipsum ve rastgele sayılar
+• Yapılacaklar listesi, kronometre ve geri sayım sayacı
+• HTTP istekleri için curl ve wget, bağlantınız için speed-test
+
+DOSYALAR VE NANO DÜZENLEYİCİ
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail ve wc
+• Her dosyayı yerleşik nano düzenleyiciyle düzenleyin
+• Pipe'lar, takma adlar, ortam değişkenleri, geçmişte arama ve Tab ile tamamlama
+• Dosyalarınız oturumlar arasında cihazınızda kalır
+
+OYUNLAR VE PKG İLE DAHA FAZLASI
+• 2048, Tetris, Snake, Mayın Tarlası, Sudoku ve Wordle, dokunarak ya da klavyeyle
+• pkg browse ek paketleri listeler, pkg add birini saniyeler içinde kurar
+• Dört Taş, Adam Asmaca, 15 bulmacası ve Mastermind yolda
+
+TELEFONUNUZ KOMUT SATIRINDA
+• device, battery ve network telefonunuzun durumunu gösterir
+• share, herhangi bir komutun çıktısını başka bir uygulamaya gönderir; betikleriniz için vibrate ve toast
+
+DOKUNMATİK EKRANLAR İÇİN TASARLANDI
+• Esc, Tab, Ctrl+C, Ctrl+L, ok tuşları ve telefon klavyelerinin gizlediği simgelerle bir tuş satırı
+• Otomatik düzeltme olmadan yazma: komutlar tam yazdığınız gibi ulaşır
+• İlk açılışta kısa bir tur temel bilgileri gösterir
+• Temalar, ayarlanabilir yazı boyutu ve 11 dil: İngilizce, Almanca, İspanyolca, Fransızca, İtalyanca, Japonca, Korece, Portekizce, Rumence, Rusça ve Çince
+
+VERİLERİNİZ SİZDE KALIR
+Hesabınız, dosyalarınız ve yapılacaklarınız yalnızca cihazınızda saklanır. Uygulama yalnızca buna ihtiyaç duyan komutlar (örneğin curl veya speed-test) ve reklam göstermek için internete bağlanır. Anonim kullanım istatistikleri uygulamayı geliştirmeye yardımcı olur; analytics off ile kapatabilirsiniz.
+
+Qodalis CLI ücretsizdir, açık kaynaklıdır ve Qodalis web terminali çatısı üzerine kuruludur: https://cli.qodalis.com
