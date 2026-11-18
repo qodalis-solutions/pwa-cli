@@ -6,11 +6,13 @@
 #   fastlane production                               rebuild this version with real ads for production (CI on main)
 #   fastlane promote to:alpha                         promote internal -> closed testing (internal builds have test ads)
 #   fastlane promote from:production to:production rollout:0.5   widen a staged rollout
-#   fastlane listing                                  push store text and images
+#   fastlane listing                                  push store text (every locale) and images
 #   fastlane listing validate:true                    dry run: Google validates, nothing changes
 #   fastlane listing images_only:true                 push only the icon, feature graphic and screenshots
 #   fastlane pull_listing                             download the listing from Play into fastlane/metadata
-# Listing text, images and release notes live in fastlane/metadata/android.
+# Listing text, images and release notes live in fastlane/metadata/android: text in one
+# folder per Play locale (en-US, de-DE, ...), images and release notes in en-US only (the
+# other languages show the English images).
 # iOS lanes (TestFlight, App Store) will go in a `platform :ios` block, with
 # their metadata in fastlane/metadata/ios.
 
@@ -160,6 +162,9 @@ platform :android do
   desc "Upload store listing text, icon, feature graphic and screenshots"
   lane :listing do |options|
     upload_to_play_store(
+      # The listing is attached to a release; use the latest internal build.
+      track: "internal",
+      version_code: google_play_track_version_codes(track: "internal").map(&:to_i).max,
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_changelogs: true,
