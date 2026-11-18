@@ -1,0 +1,1 @@
+Qodalis CLI：離線終端機

@@ -1,0 +1,1 @@
+Qodalis CLI: 오프라인 터미널

@@ -1,0 +1,37 @@
+Qodalis CLI 把真正的命令行装进你的手机。输入命令，按下回车：100 多个命令直接在设备上运行，离线可用，无需任何在线账号。
+
+日常工具
+• guid、hash（SHA-1/256/384/512）、base64、hex、url、jwt decode、binary 和 morse
+• generate-password 生成高强度随机密码
+• qr 直接在终端里绘制二维码
+• 在终端中显示图表和 Markdown
+• regex、json、csv 工具，以及 upper、camelCase、slug、pad、replace 等字符串工具
+• cal、时间戳、cron 计划、lorem ipsum 和随机数
+• 待办清单、秒表和倒计时器
+• 用 curl 和 wget 发送 HTTP 请求，用 speed-test 测试网速
+
+文件与 nano 编辑器
+• ls、cd、mkdir、cat、cp、mv、rm、tree、find、grep、sed、awk、sort、head、tail 和 wc
+• 用内置的 nano 编辑器编辑任意文件
+• 管道、别名、环境变量、历史搜索和 Tab 补全
+• 文件在会话之间保存在你的设备上
+
+游戏，用 pkg 还能更多
+• 2048、俄罗斯方块、贪吃蛇、扫雷、数独和 Wordle，触屏或键盘皆可玩
+• pkg browse 列出更多扩展包，pkg add 几秒内即可安装
+• 四子棋、猜词游戏、数字华容道和 Mastermind 即将推出
+
+在命令行里掌控手机
+• device、battery 和 network 显示手机的当前状态
+• share 把任何命令的输出发送到其他应用；vibrate 和 toast 可用于你的脚本
+
+专为触屏打造
+• 一排按键，包含 Esc、Tab、Ctrl+C、Ctrl+L、方向键以及手机键盘藏起来的符号
+• 关闭自动更正的输入方式，命令与输入的完全一致
+• 首次启动时的简短导览带你了解基础操作
+• 主题、可调字号和 11 种语言：英语、德语、西班牙语、法语、意大利语、日语、韩语、葡萄牙语、罗马尼亚语、俄语和中文
+
+你的数据留在你身边
+你的账号、文件和待办事项只保存在你的设备上。应用只在运行需要联网的命令（如 curl 或 speed-test）以及展示广告时才会联网。匿名使用统计有助于改进应用；可用 analytics off 关闭。
+
+Qodalis CLI 免费、开源，基于 Qodalis 网页终端框架构建：https://cli.qodalis.com
