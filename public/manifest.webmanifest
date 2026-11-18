@@ -101,14 +101,49 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Developer tools"
+      "label": "Everyday tools: encoding, hashes, passwords, QR codes"
     },
     {
       "src": "screenshots/phone-3.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Games in the terminal"
+      "label": "2048 and other games in the terminal"
+    },
+    {
+      "src": "screenshots/phone-4.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Files and the nano editor"
+    },
+    {
+      "src": "screenshots/phone-5.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Charts and Markdown"
+    },
+    {
+      "src": "screenshots/phone-6.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "More tools with pkg browse and pkg add"
+    },
+    {
+      "src": "screenshots/phone-7.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Themes and a to-do list"
+    },
+    {
+      "src": "screenshots/phone-8.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "The CLI in German, one of 11 languages"
     }
   ]
 }
