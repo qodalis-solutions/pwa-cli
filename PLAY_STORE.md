@@ -13,7 +13,8 @@ Play Console account owner can do.
 | Ads | Since 1.0.7, Android only: one adaptive AdMob banner at the top (`src/app/ads.ts`), after Google's consent message (UMP; no ads without a consent decision), hidden while a game or nano runs; since 1.0.8 the banner appears a minute after the terminal is ready, and a full-screen (interstitial) ad comes between commands: one per 15 commands run, at least 5 minutes apart, none in the first 3 minutes after the app opens or while a game or nano runs, and only after a 5-second pause with no key or touch (`commandRun` in `ads.ts`, unit `ca-app-pub-5597997223302010/1483517686`). `privacy choices` reopens the consent form. AdMob app `ca-app-pub-5597997223302010~2904284252`, banner unit `ca-app-pub-5597997223302010/5044408612`, used only by the Play production bundle (`play` build configuration, `ad-units.play.ts`); every other build shows Google's test banner, internal-testing bundles included (`play-internal` configuration, so testers' taps never count as invalid traffic). The consent message, frequency settings and app-ads.txt (cli.qodalis.com and qodalis.com) live in the AdMob account |
 | Analytics | Firebase project `qodalis-cli`; its config `android/app/google-services.json` is committed (it holds identifiers, not secrets: restrict the API key to `com.qodalis.cli` in Google Cloud). Events: Firebase's automatic ones plus `command_run` (`command`, `success`), see `src/app/analytics.ts`; users opt out with `analytics off` |
 | Bundle | `npm run android:bundle` → `android/app/build/outputs/bundle/release/app-release.aab` (real ads); CI uploads a test-ads build from `develop` and a real-ads build from `main` |
-| Listing text and images | `fastlane/metadata/android/en-US/` |
+| Listing text | `fastlane/metadata/android/<locale>/` in 17 languages (en-US plus de-DE, es-ES, es-419, fr-FR, it-IT, ja-JP, ko-KR, pl-PL, pt-BR, pt-PT, ro, ru-RU, tr-TR, uk, zh-CN, zh-TW) |
+| Listing images and release notes | `fastlane/metadata/android/en-US/` (other languages fall back to the English images) |
 | Privacy policy | https://cli.qodalis.com/privacy/ (web-cli `apps/docs/src/static/privacy`); a copy ships with the PWA at `/privacy.html`; in the app: `privacy` |
 
 ## 1. Upload key
@@ -92,12 +93,17 @@ keyPassword=...
    - Full description: `full_description.txt`
    - App icon: `images/icon.png` (512×512)
    - Feature graphic: `images/featureGraphic.png` (1024×500)
-   - Phone screenshots: `images/phoneScreenshots/*.png` (1080×1920)
+   - Phone screenshots: `images/phoneScreenshots/*.png` (8, 1080×1920); 7-inch tablet:
+     `images/sevenInchScreenshots/*.png` (1200×1920); 10-inch tablet: `images/tenInchScreenshots/*.png`
+     (2560×1600). `npm run screenshots` makes them all from the production build.
    - Category: *Tools*. Tags (at most 5, from Google's list): *Tools*, *Productivity*, *Network
      connectivity*, *Clock, alarm & timer*, *Notebook*. Contact email: required, use a support
      address you monitor.
-   - The images can also be pushed with `fastlane listing images_only:true`; `fastlane listing` pushes
-     the text too (title from `title.txt`: *Qodalis CLI: Offline Terminal*).
+   - Translations: every other folder in `fastlane/metadata/android/` holds the same three text files
+     for one Play locale. `fastlane listing` creates or updates each of these translations and pushes
+     the images; `fastlane listing validate:true` lets Google check everything without saving, and
+     `fastlane listing images_only:true` pushes only the images. The lane attaches the listing to the
+     latest internal build, as RateBell's does. Title in English: *Qodalis CLI: Offline Terminal*.
 
 ## 3. First release (manual)
 
