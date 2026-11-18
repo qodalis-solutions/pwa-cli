@@ -1,5 +1,6 @@
 <main
   class="shell"
+  [attr.inert]="intro() ? '' : null"
   [class.playing]="playing()"
   (pointerdown)="gestureStart($event)"
   (pointerup)="gestureEnd($event)"
@@ -20,4 +21,7 @@
     <button type="button" class="update-reload" (click)="reload()">A new version is ready. Tap to reload.</button>
     <button type="button" class="update-dismiss" aria-label="Dismiss" (click)="updateReady.set(false)">✕</button>
   </div>
+}
+@if (intro(); as request) {
+  <app-intro [locale]="request.locale" [trigger]="request.trigger" (closed)="onIntroClosed($event)" />
 }

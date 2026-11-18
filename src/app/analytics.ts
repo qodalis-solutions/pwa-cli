@@ -23,6 +23,19 @@ import { platform } from './native/native-shell';
 export const analyticsAvailable = platform === 'android';
 
 /**
+ * Sends an app event (the introduction's steps). Android only, like
+ * `command_run`; the web app sends nothing, but end-to-end tests can collect
+ * the events in a `window.qodalisAnalyticsLog` array they create.
+ */
+export function logEvent(name: string, params: Record<string, string | number> = {}): void {
+  if (analyticsAvailable) {
+    FirebaseAnalytics.logEvent({ name, params }).catch(() => {});
+    return;
+  }
+  (window as unknown as { qodalisAnalyticsLog?: unknown[] }).qodalisAnalyticsLog?.push({ name, params });
+}
+
+/**
  * The command a line runs, if it is a registered command: its first word,
  * resolved to the processor's own name (so aliases count once). Anything
  * else (a typo, text typed at the prompt by mistake) is not reported.

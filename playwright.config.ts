@@ -19,6 +19,11 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
+    // Tests start at the terminal: the first-run introduction counts as seen (intro.spec.ts clears this).
+    storageState: {
+      cookies: [],
+      origins: [{ origin: `http://localhost:${PORT}`, localStorage: [{ name: 'qcli.introSeen', value: '1' }] }],
+    },
   },
   projects: [
     {
