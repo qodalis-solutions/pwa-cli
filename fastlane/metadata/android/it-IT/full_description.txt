@@ -3,7 +3,7 @@ Qodalis CLI porta una vera riga di comando sul tuo telefono. Scrivi un comando e
 STRUMENTI DI TUTTI I GIORNI
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary e morse
 • generate-password per password casuali e sicure
-• qr disegna codici QR direttamente nel terminale
+• qr trasforma qualsiasi testo o link in un'immagine con codice QR
 • Grafici e Markdown visualizzati nel terminale
 • Strumenti per regex, json e csv, e per il testo: upper, camelCase, slug, pad, replace e altro
 • cal, timestamp, pianificazioni cron, lorem ipsum e numeri casuali

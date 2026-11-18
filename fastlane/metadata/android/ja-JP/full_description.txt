@@ -3,7 +3,7 @@ Qodalis CLI は、スマートフォンに本物のコマンドラインを届�
 毎日使えるツール
 • guid、hash（SHA-1/256/384/512）、base64、hex、url、jwt decode、binary、morse
 • 安全なランダムパスワードを作る generate-password
-• qr でターミナルに QR コードを表示
+• qr でテキストやリンクを QR コード画像に変換
 • グラフと Markdown をターミナルで表示
 • regex、json、csv のツールと、upper、camelCase、slug、pad、replace などの文字列ツール
 • cal、タイムスタンプ、cron スケジュール、lorem ipsum、乱数

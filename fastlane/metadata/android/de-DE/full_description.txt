@@ -3,7 +3,7 @@ Qodalis CLI bringt eine echte Kommandozeile auf dein Handy. Befehl eingeben, Ent
 WERKZEUGE FÜR JEDEN TAG
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary und morse
 • generate-password für starke Zufallspasswörter
-• qr zeichnet QR-Codes direkt im Terminal
+• qr macht aus jedem Text oder Link ein QR-Code-Bild
 • Diagramme und Markdown, im Terminal dargestellt
 • Werkzeuge für regex, json und csv, dazu Textfunktionen: upper, camelCase, slug, pad, replace und mehr
 • cal, Zeitstempel, Cron-Zeitpläne, Lorem ipsum und Zufallszahlen

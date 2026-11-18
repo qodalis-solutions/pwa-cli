@@ -3,7 +3,7 @@ Qodalis CLI는 휴대폰에 진짜 명령줄을 담았습니다. 명령을 입�
 매일 쓰는 도구
 • guid, hash(SHA-1/256/384/512), base64, hex, url, jwt decode, binary, morse
 • 강력한 무작위 비밀번호를 만드는 generate-password
-• qr로 터미널에 바로 QR 코드 그리기
+• qr로 텍스트나 링크를 QR 코드 이미지로 변환
 • 터미널에서 보는 차트와 Markdown
 • regex, json, csv 도구와 upper, camelCase, slug, pad, replace 등 문자열 도구
 • cal, 타임스탬프, cron 일정, lorem ipsum, 난수

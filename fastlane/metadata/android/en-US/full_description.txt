@@ -3,7 +3,7 @@ Qodalis CLI puts a real command line on your phone. Type a command, press Enter:
 EVERYDAY TOOLS
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary and morse
 • generate-password for strong random passwords
-• qr draws QR codes right in the terminal
+• qr turns any text or link into a QR code image
 • Charts and Markdown rendered in the terminal
 • regex, json and csv tools, plus string tools: upper, camelCase, slug, pad, replace and more
 • cal, timestamps, cron schedules, lorem ipsum and random numbers

@@ -3,7 +3,7 @@ Qodalis CLI — справжній командний рядок у вашому
 ІНСТРУМЕНТИ НА ЩОДЕНЬ
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary і morse
 • generate-password для надійних випадкових паролів
-• qr малює QR-коди просто в терміналі
+• qr перетворює будь-який текст або посилання на зображення QR-коду
 • Графіки й Markdown просто в терміналі
 • Інструменти для regex, json і csv, а також для тексту: upper, camelCase, slug, pad, replace та інші
 • cal, мітки часу, розклади cron, lorem ipsum і випадкові числа

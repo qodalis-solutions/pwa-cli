@@ -3,7 +3,7 @@ Qodalis CLI lleva una línea de comandos de verdad a tu celular. Escribe un coma
 HERRAMIENTAS PARA EL DÍA A DÍA
 • guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary y morse
 • generate-password para contraseñas aleatorias seguras
-• qr dibuja códigos QR en la misma terminal
+• qr convierte cualquier texto o enlace en una imagen de código QR
 • Gráficas y Markdown mostrados en la terminal
 • Herramientas de regex, json y csv, y de texto: upper, camelCase, slug, pad, replace y más
 • cal, marcas de tiempo, programaciones cron, lorem ipsum y números aleatorios
