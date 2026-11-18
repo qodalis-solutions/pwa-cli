@@ -1,0 +1,37 @@
+O Qodalis CLI põe uma verdadeira linha de comandos no seu telemóvel. Escreva um comando e prima Enter: mais de 100 comandos correm diretamente no seu dispositivo, funcionam offline e não precisam de nenhuma conta online.
+
+FERRAMENTAS PARA O DIA A DIA
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary e morse
+• generate-password para palavras-passe aleatórias e fortes
+• qr desenha códigos QR no próprio terminal
+• Gráficos e Markdown apresentados no terminal
+• Ferramentas de regex, json e csv, e de texto: upper, camelCase, slug, pad, replace e mais
+• cal, carimbos de data/hora, agendamentos cron, lorem ipsum e números aleatórios
+• Uma lista de tarefas, um cronómetro e um temporizador
+• curl e wget para pedidos HTTP, speed-test para testar a sua ligação
+
+FICHEIROS E O EDITOR NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail e wc
+• Edite qualquer ficheiro com o editor nano integrado
+• Pipes, aliases, variáveis de ambiente, pesquisa no histórico e preenchimento com Tab
+• Os seus ficheiros ficam no dispositivo de uma sessão para a outra
+
+JOGOS, E MAIS COM PKG
+• 2048, Tetris, Snake, Campo Minado, Sudoku e Wordle, com o toque ou com o teclado
+• pkg browse lista pacotes adicionais e pkg add instala um em segundos
+• Quatro em Linha, o Jogo da Forca, o jogo do 15 e Mastermind estão a caminho
+
+O SEU TELEMÓVEL NA LINHA DE COMANDOS
+• device, battery e network mostram o que o seu telemóvel está a fazer
+• share envia o resultado de qualquer comando para outra app; vibrate e toast para os seus scripts
+
+FEITO PARA ECRÃS TÁTEIS
+• Uma fila de teclas com Esc, Tab, Ctrl+C, Ctrl+L, setas e os símbolos que os teclados do telemóvel escondem
+• Escrita sem correção automática, para que os comandos cheguem exatamente como os escreve
+• Uma visita guiada curta no primeiro arranque mostra o essencial
+• Temas, tamanho de letra ajustável e 11 idiomas: inglês, alemão, espanhol, francês, italiano, japonês, coreano, português, romeno, russo e chinês
+
+OS SEUS DADOS FICAM CONSIGO
+A sua conta, os seus ficheiros e as suas tarefas são guardados apenas no seu dispositivo. A app só se liga à internet para os comandos que precisam, como curl ou speed-test, e para mostrar anúncios. Estatísticas de utilização anónimas ajudam a melhorar a app; desative-as com analytics off.
+
+O Qodalis CLI é gratuito, de código aberto e assenta no framework de terminal web da Qodalis: https://cli.qodalis.com

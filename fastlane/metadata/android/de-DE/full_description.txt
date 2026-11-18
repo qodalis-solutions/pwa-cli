@@ -1,0 +1,37 @@
+Qodalis CLI bringt eine echte Kommandozeile auf dein Handy. Befehl eingeben, Enter drücken: Über 100 Befehle laufen direkt auf deinem Gerät, funktionieren offline und brauchen kein Online-Konto.
+
+WERKZEUGE FÜR JEDEN TAG
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary und morse
+• generate-password für starke Zufallspasswörter
+• qr zeichnet QR-Codes direkt im Terminal
+• Diagramme und Markdown, im Terminal dargestellt
+• Werkzeuge für regex, json und csv, dazu Textfunktionen: upper, camelCase, slug, pad, replace und mehr
+• cal, Zeitstempel, Cron-Zeitpläne, Lorem ipsum und Zufallszahlen
+• Eine To-do-Liste, eine Stoppuhr und ein Countdown-Timer
+• curl und wget für HTTP-Anfragen, speed-test für deine Verbindung
+
+DATEIEN UND DER EDITOR NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail und wc
+• Jede Datei mit dem eingebauten Editor nano bearbeiten
+• Pipes, Aliase, Umgebungsvariablen, Suche im Verlauf und Tab-Vervollständigung
+• Deine Dateien bleiben zwischen den Sitzungen auf deinem Gerät
+
+SPIELE, UND MEHR MIT PKG
+• 2048, Tetris, Snake, Minesweeper, Sudoku und Wordle, per Touch oder Tastatur
+• pkg browse listet zusätzliche Pakete auf, pkg add installiert eines in Sekunden
+• Vier gewinnt, Galgenmännchen, 15-Puzzle und Mastermind sind unterwegs
+
+DEIN HANDY AUF DER KOMMANDOZEILE
+• device, battery und network zeigen, was dein Handy gerade macht
+• share schickt die Ausgabe eines Befehls an eine andere App; vibrate und toast für deine Skripte
+
+FÜR TOUCHSCREENS GEMACHT
+• Eine Tastenleiste mit Esc, Tab, Strg+C, Strg+L, Pfeilen und den Zeichen, die Handytastaturen verstecken
+• Eingabe ohne Autokorrektur, damit Befehle genau so ankommen, wie du sie tippst
+• Eine kurze Tour beim ersten Start zeigt dir das Wichtigste
+• Themes, einstellbare Schriftgröße und 11 Sprachen: Englisch, Deutsch, Spanisch, Französisch, Italienisch, Japanisch, Koreanisch, Portugiesisch, Rumänisch, Russisch und Chinesisch
+
+DEINE DATEN BLEIBEN BEI DIR
+Dein Konto, deine Dateien und To-dos werden nur auf deinem Gerät gespeichert. Die App geht nur für Befehle online, die das brauchen, etwa curl oder speed-test, und um Werbung anzuzeigen. Anonyme Nutzungsstatistiken helfen, die App zu verbessern; mit analytics off schaltest du sie ab.
+
+Qodalis CLI ist kostenlos, Open Source und basiert auf dem Web-Terminal-Framework von Qodalis: https://cli.qodalis.com

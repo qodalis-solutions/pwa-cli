@@ -1,0 +1,37 @@
+Qodalis CLI îți aduce o linie de comandă adevărată pe telefon. Scrii o comandă, apeși Enter: peste 100 de comenzi rulează direct pe dispozitivul tău, funcționează offline și nu au nevoie de niciun cont online.
+
+UNELTE PENTRU FIECARE ZI
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary și morse
+• generate-password pentru parole aleatorii puternice
+• qr desenează coduri QR chiar în terminal
+• Grafice și Markdown afișate în terminal
+• Unelte pentru regex, json și csv, plus unelte pentru text: upper, camelCase, slug, pad, replace și altele
+• cal, marcaje de timp, programări cron, lorem ipsum și numere aleatorii
+• O listă de sarcini, un cronometru și o numărătoare inversă
+• curl și wget pentru cereri HTTP, speed-test pentru conexiunea ta
+
+FIȘIERE ȘI EDITORUL NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail și wc
+• Editezi orice fișier cu editorul nano inclus
+• Pipe-uri, aliasuri, variabile de mediu, căutare în istoric și completare cu Tab
+• Fișierele tale rămân pe dispozitiv de la o sesiune la alta
+
+JOCURI, ȘI MAI MULTE CU PKG
+• 2048, Tetris, Snake, Minesweeper, Sudoku și Wordle, prin atingere sau de la tastatură
+• pkg browse listează pachetele suplimentare, iar pkg add instalează unul în câteva secunde
+• Connect Four, Spânzurătoarea, Perspico (puzzle 15) și Mastermind sunt pe drum
+
+TELEFONUL TĂU DIN LINIA DE COMANDĂ
+• device, battery și network arată ce face telefonul tău
+• share trimite rezultatul oricărei comenzi către altă aplicație; vibrate și toast pentru scripturile tale
+
+GÂNDIT PENTRU ECRANE TACTILE
+• Un rând de taste cu Esc, Tab, Ctrl+C, Ctrl+L, săgeți și simbolurile pe care tastaturile telefoanelor le ascund
+• Tastare fără corectare automată, ca comenzile să ajungă exact cum le-ai scris
+• Un scurt tur la prima pornire îți arată ce trebuie să știi
+• Teme, mărime de font reglabilă și 11 limbi: engleză, germană, spaniolă, franceză, italiană, japoneză, coreeană, portugheză, română, rusă și chineză
+
+DATELE TALE RĂMÂN LA TINE
+Contul, fișierele și sarcinile tale sunt păstrate doar pe dispozitivul tău. Aplicația se conectează la internet doar pentru comenzile care au nevoie, cum ar fi curl sau speed-test, și pentru a afișa reclame. Statisticile anonime de utilizare ne ajută să îmbunătățim aplicația; le dezactivezi cu analytics off.
+
+Qodalis CLI este gratuit, open source și construit pe framework-ul de terminal web Qodalis: https://cli.qodalis.com

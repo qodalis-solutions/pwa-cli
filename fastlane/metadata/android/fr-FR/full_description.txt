@@ -1,0 +1,37 @@
+Qodalis CLI met une vraie ligne de commande dans votre téléphone. Tapez une commande, appuyez sur Entrée : plus de 100 commandes s'exécutent directement sur votre appareil, fonctionnent hors ligne et ne demandent aucun compte en ligne.
+
+DES OUTILS POUR TOUS LES JOURS
+• guid, hash (SHA-1/256/384/512), base64, hex, url, jwt decode, binary et morse
+• generate-password pour des mots de passe aléatoires robustes
+• qr dessine des QR codes directement dans le terminal
+• Graphiques et Markdown affichés dans le terminal
+• Outils regex, json et csv, et outils de texte : upper, camelCase, slug, pad, replace et plus encore
+• cal, horodatages, planifications cron, lorem ipsum et nombres aléatoires
+• Une liste de tâches, un chronomètre et un compte à rebours
+• curl et wget pour les requêtes HTTP, speed-test pour votre connexion
+
+LES FICHIERS ET L'ÉDITEUR NANO
+• ls, cd, mkdir, cat, cp, mv, rm, tree, find, grep, sed, awk, sort, head, tail et wc
+• Modifiez n'importe quel fichier avec l'éditeur nano intégré
+• Pipes, alias, variables d'environnement, recherche dans l'historique et complétion avec Tab
+• Vos fichiers restent sur votre appareil d'une session à l'autre
+
+DES JEUX, ET PLUS AVEC PKG
+• 2048, Tetris, Snake, Démineur, Sudoku et Wordle, au doigt ou au clavier
+• pkg browse liste les paquets supplémentaires et pkg add en installe un en quelques secondes
+• Puissance 4, le Pendu, le taquin et Mastermind arrivent bientôt
+
+VOTRE TÉLÉPHONE EN LIGNE DE COMMANDE
+• device, battery et network montrent ce que fait votre téléphone
+• share envoie la sortie de n'importe quelle commande vers une autre app ; vibrate et toast pour vos scripts
+
+CONÇU POUR LES ÉCRANS TACTILES
+• Une rangée de touches avec Échap, Tab, Ctrl+C, Ctrl+L, les flèches et les symboles que cachent les claviers de téléphone
+• Une saisie sans correction automatique : les commandes arrivent exactement comme vous les tapez
+• Une courte visite guidée au premier lancement présente l'essentiel
+• Thèmes, taille de police réglable et 11 langues : anglais, allemand, espagnol, français, italien, japonais, coréen, portugais, roumain, russe et chinois
+
+VOS DONNÉES RESTENT CHEZ VOUS
+Votre compte, vos fichiers et vos tâches sont enregistrés uniquement sur votre appareil. L'app ne se connecte à Internet que pour les commandes qui en ont besoin, comme curl ou speed-test, et pour afficher des annonces. Des statistiques d'utilisation anonymes aident à améliorer l'app ; désactivez-les avec analytics off.
+
+Qodalis CLI est gratuit, open source et repose sur le framework de terminal web de Qodalis : https://cli.qodalis.com
