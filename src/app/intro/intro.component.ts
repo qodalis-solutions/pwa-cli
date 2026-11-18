@@ -61,9 +61,15 @@ const SWIPE_PX = 50;
               [attr.aria-hidden]="i === index() ? null : 'true'"
               [attr.inert]="i === index() ? null : ''"
             >
-              <div class="art" aria-hidden="true">
-                <span class="icon">{{ slide.icon }}</span>
-                <pre class="mock">{{ slide.mock.join('\n') }}</pre>
+              <div class="art">
+                <img
+                  [src]="slide.image"
+                  [attr.width]="slide.width"
+                  [attr.height]="slide.height"
+                  [alt]="text().slides[i][2]"
+                  decoding="async"
+                  draggable="false"
+                />
               </div>
               <div class="copy">
                 <h2>{{ text().slides[i][0] }}</h2>
@@ -105,8 +111,6 @@ const SWIPE_PX = 50;
       --intro-border: #2a313b
       --intro-accent: #5aa9f0
       --intro-accent-fg: #06121f
-      --intro-mock-bg: #000
-      --intro-mock-fg: #9fe870
       position: fixed
       inset: 0
       z-index: 20
@@ -128,8 +132,6 @@ const SWIPE_PX = 50;
         --intro-border: #d0d7de
         --intro-accent: #0969da
         --intro-accent-fg: #fff
-        --intro-mock-bg: #1b1f24
-        --intro-mock-fg: #9fe870
         color-scheme: light
 
     .intro
@@ -173,27 +175,21 @@ const SWIPE_PX = 50;
 
     .art
       display: flex
-      flex-direction: column
-      align-items: center
-      gap: 12px
+      justify-content: center
+      min-height: 0
 
-    .icon
-      font-size: 48px
-      line-height: 1
-
-    .mock
-      width: 100%
-      max-width: 320px
-      box-sizing: border-box
-      margin: 0
-      padding: 12px 14px
+    // Screenshots of the terminal at phone width (392 CSS pixels at 2x), never upscaled
+    img
+      display: block
+      width: auto
+      height: auto
+      max-width: min(100%, 392px)
+      max-height: 40dvh
       border: 1px solid var(--intro-border)
       border-radius: 10px
-      background: var(--intro-mock-bg)
-      color: var(--intro-mock-fg)
-      font: 13px/1.5 ui-monospace, 'SF Mono', Menlo, 'Roboto Mono', monospace
-      white-space: pre
-      overflow: hidden
+      background: #0b0d16
+      user-select: none
+      -webkit-user-drag: none
 
     .copy
       display: flex
@@ -307,8 +303,9 @@ const SWIPE_PX = 50;
         gap: 24px
       .art, .copy
         flex: 1 1 50%
-      .icon
-        font-size: 36px
+        min-width: 0
+      img
+        max-height: calc(100dvh - var(--inset-top) - var(--inset-bottom) - 100px)
       h2
         font-size: 20px
       footer
